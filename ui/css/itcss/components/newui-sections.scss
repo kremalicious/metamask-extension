@@ -66,7 +66,7 @@
 
 @include screen-md-min {
   .main-container {
-    width: 80vw;
+    width: 62vw;
     min-height: 82vh;
     box-shadow: var(--shadow-size-xs) var(--color-shadow-default);
   }
@@ -74,7 +74,7 @@
 
 @include screen-lg-min {
   .main-container {
-    width: 62vw;
+    width: 50vw;
     min-height: 82vh;
     box-shadow: var(--shadow-size-xs) var(--color-shadow-default);
   }
