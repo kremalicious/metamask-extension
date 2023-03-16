@@ -6,7 +6,7 @@ const defaultRender = (inner) => inner;
 
 export default function IconButton({
   onClick,
-  Icon,
+  // Icon,
   disabled,
   label,
   tooltipRender,
@@ -25,7 +25,7 @@ export default function IconButton({
     >
       {renderWrapper(
         <>
-          <div className="icon-button__circle">{Icon}</div>
+          {/* <div className="icon-button__circle">{Icon}</div> */}
           <span>{label}</span>
         </>,
       )}
