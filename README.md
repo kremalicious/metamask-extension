@@ -1,18 +1,23 @@
 # MetaMask Browser Extension
 
-**Minimalized version of MetaMask for my own personal use without the myriad of banners & buttons I will never use. Don't blindly trust me and double check the changes before installing this in your own browser.**
+> 🦊 Minimalized version of MetaMask for my own personal use without the myriad of banners & buttons I will never use, and without that terrible Roboto typeface.
 
-Notable changes compared to upstream:
+**Don't blindly trust me and double check the changes before installing this in your own browser.**
 
-- tweaked overall typography defaulting to system font Avenir Next (will only work on macOS)
-- hide all those unneccessary nagging banners, like Ledger connection instructions (have connected it for many years) or network is busy (it always is)
+[**Compare code changes →**](https://github.com/MetaMask/metamask-extension/compare/develop...kremalicious:metamask-extension:minimal)
+
+## Notable Changes
+
+- tweaked overall typography defaulting to system font Avenir Next on macOS, respective default system font on all other OS
+- hide all those unneccessary nagging banners, like *Ledger connection instructions* or *network is busy* (it always is)
+- minimal lock screen
 - NFT tab enabled by default
 - UX improvements around account dropdown when many accounts are in there
 - UX improvements around network dropdown
-- remove all the Buy, Swap etc. buttons, replace remaining Send with text only
-- remove all "contact support" banners
+- remove all the *Buy*, *Swap* etc. buttons, replace remaining *Send* with text only
+- remove all *contact support* banners
 
-Quickstart:
+## Quick Start
 
 ```bash
 yarn

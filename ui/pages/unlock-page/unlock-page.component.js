@@ -129,7 +129,6 @@ export default class UnlockPage extends Component {
       color: 'var(--color-primary-inverse)',
       marginTop: '20px',
       height: '60px',
-      fontWeight: '400',
       boxShadow: 'none',
       borderRadius: '100px',
     };

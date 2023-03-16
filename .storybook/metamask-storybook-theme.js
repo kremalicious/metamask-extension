@@ -7,6 +7,6 @@ export default create({
   brandTitle: 'MetaMask Storybook',
 
   // Typography
-  fontBase: 'Euclid Circular B, Roboto, Helvetica, Arial, sans-serif',
+  fontBase: "'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif",
   fontCode: 'Inconsolata, monospace',
 });

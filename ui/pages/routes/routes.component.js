@@ -390,7 +390,11 @@ export default class Routes extends Component {
       }),
     );
 
-    return isHandlingPermissionsRequest || isHandlingAddEthereumChainRequest;
+    return (
+      isHandlingPermissionsRequest ||
+      isHandlingAddEthereumChainRequest ||
+      !this.props.isUnlocked
+    );
   }
 
   showOnboardingHeader() {
