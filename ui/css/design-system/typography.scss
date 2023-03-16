@@ -7,77 +7,7 @@ $fa-font-path: 'fonts/fontawesome';
 @import '../../../node_modules/@fortawesome/fontawesome-free/scss/solid';
 @import '../../../node_modules/@fortawesome/fontawesome-free/scss/regular';
 
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 100;
-  src: local('Roboto Thin'), local('Roboto-Thin'), url('fonts/Roboto/Roboto-Thin.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Roboto Light'), local('Roboto-Light'), url('fonts/Roboto/Roboto-Light.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Roboto'), local('Roboto-Regular'), url('fonts/Roboto/Roboto-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 500;
-  src: local('Roboto Medium'), local('Roboto-Medium'), url('fonts/Roboto/Roboto-Medium.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Roboto Bold'), local('Roboto-Bold'), url('fonts/Roboto/Roboto-Bold.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 900;
-  src: local('Roboto Black'), local('Roboto-Black'), url('fonts/Roboto/Roboto-Black.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Euclid Circular B';
-  font-style: normal;
-  font-weight: 400;
-  src: url('fonts/Euclid/EuclidCircularB-Regular-WebXL.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Euclid Circular B';
-  font-style: italic;
-  font-weight: 400;
-  src: url('fonts/Euclid/EuclidCircularB-RegularItalic-WebXL.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Euclid Circular B';
-  font-style: normal;
-  font-weight: 500;
-  src: url('fonts/Euclid/EuclidCircularB-Medium.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Euclid Circular B';
-  font-style: normal;
-  font-weight: 700;
-  src: url('fonts/Euclid/EuclidCircularB-Bold-WebXL.ttf') format('truetype');
-}
-
-$font-family: 'Euclid Circular B', Roboto, Helvetica, Arial, sans-serif;
+$font-family: 'Avenir Next', -apple-system, BlinkMacSystemFont, sans-serif;
 
 $typography-variants: (
   'h1': 2.5rem,
@@ -114,26 +44,32 @@ $font-size-h9: map-get($typography-variants, 'h9');
 // Typography
 @mixin H1 {
   @include typography('h1');
+  font-weight: 500;
 }
 
 @mixin H2 {
   @include typography('h2');
+  font-weight: 500;
 }
 
 @mixin H3 {
   @include typography('h3');
+  font-weight: 500;
 }
 
 @mixin H4 {
   @include typography('h4');
+  font-weight: 500;
 }
 
 @mixin H5 {
   @include typography('h5');
+  font-weight: 500;
 }
 
 @mixin H6 {
   @include typography('h6');
+  font-weight: 500;
 }
 
 @mixin Paragraph {
@@ -142,12 +78,15 @@ $font-size-h9: map-get($typography-variants, 'h9');
 
 @mixin H7 {
   @include typography('h7');
+  font-weight: 500;
 }
 
 @mixin H8 {
   @include typography('h8');
+  font-weight: 500;
 }
 
 @mixin H9 {
   @include typography('h9');
+  font-weight: 500;
 }
