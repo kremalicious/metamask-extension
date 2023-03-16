@@ -30,9 +30,9 @@ import {
 } from '../../../helpers/constants/routes';
 import {
   Icon,
-  ButtonIcon,
+  // ButtonIcon,
   ICON_NAMES,
-  ICON_SIZES,
+  // ICON_SIZES,
 } from '../../component-library';
 import { Dropdown, DropdownMenuItem } from './dropdown';
 
@@ -109,7 +109,7 @@ class NetworkDropdown extends Component {
     shouldShowTestNetworks: PropTypes.bool,
     networkDropdownOpen: PropTypes.bool.isRequired,
     displayInvalidCustomNetworkAlert: PropTypes.func.isRequired,
-    showConfirmDeleteNetworkModal: PropTypes.func.isRequired,
+    // showConfirmDeleteNetworkModal: PropTypes.func.isRequired,
     showTestnetMessageInDropdown: PropTypes.bool.isRequired,
     hideTestNetMessage: PropTypes.func.isRequired,
     history: PropTypes.object,
@@ -165,7 +165,7 @@ class NetworkDropdown extends Component {
   renderCustomRpcList(networkConfigurations, provider, opts = {}) {
     return Object.entries(networkConfigurations).map(
       ([networkConfigurationId, networkConfiguration]) => {
-        const { rpcUrl, chainId, nickname = '', id } = networkConfiguration;
+        const { rpcUrl, chainId, nickname = '' } = networkConfiguration;
         const isCurrentRpcTarget =
           provider.type === NETWORK_TYPES.RPC && rpcUrl === provider.rpcUrl;
         return (
@@ -206,21 +206,6 @@ class NetworkDropdown extends Component {
             >
               {nickname || rpcUrl}
             </span>
-            {isCurrentRpcTarget ? null : (
-              <ButtonIcon
-                className="delete"
-                iconName={ICON_NAMES.CLOSE}
-                size={ICON_SIZES.SM}
-                ariaLabel={this.context.t('delete')}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  this.props.showConfirmDeleteNetworkModal({
-                    target: id,
-                    onConfirm: () => undefined,
-                  });
-                }}
-              />
-            )}
           </DropdownMenuItem>
         );
       },
