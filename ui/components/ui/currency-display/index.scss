@@ -13,9 +13,13 @@
 
   &__prefix {
     padding-right: 4px;
+
+    &:empty { display: none ;}
   }
 
   &__suffix {
     padding-left: 4px;
+
+    &:empty { display: none ;}
   }
 }
