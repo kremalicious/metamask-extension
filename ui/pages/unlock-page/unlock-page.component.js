@@ -8,9 +8,8 @@ import { DEFAULT_ROUTE } from '../../helpers/constants/routes';
 import {
   EVENT,
   EVENT_NAMES,
-  CONTEXT_PROPS,
+  // CONTEXT_PROPS,
 } from '../../../shared/constants/metametrics';
-import { SUPPORT_LINK } from '../../../shared/lib/ui-utils';
 import { isBeta } from '../../helpers/utils/build-types';
 import { getCaretCoordinates } from './unlock-page.util';
 
@@ -170,8 +169,6 @@ export default class UnlockPage extends Component {
               </div>
             ) : null}
           </div>
-          <h1 className="unlock-page__title">{t('welcomeBack')}</h1>
-          <div>{t('unlockMessage')}</div>
           <form className="unlock-page__form" onSubmit={this.handleSubmit}>
             <TextField
               id="password"
@@ -197,34 +194,6 @@ export default class UnlockPage extends Component {
             >
               {t('forgotPassword')}
             </Button>
-          </div>
-          <div className="unlock-page__support">
-            {t('needHelp', [
-              <a
-                href={SUPPORT_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                key="need-help-link"
-                onClick={() => {
-                  this.context.trackEvent(
-                    {
-                      category: EVENT.CATEGORIES.NAVIGATION,
-                      event: EVENT_NAMES.SUPPORT_LINK_CLICKED,
-                      properties: {
-                        url: SUPPORT_LINK,
-                      },
-                    },
-                    {
-                      contextPropsIntoEventProperties: [
-                        CONTEXT_PROPS.PAGE_TITLE,
-                      ],
-                    },
-                  );
-                }}
-              >
-                {t('needHelpLinkText')}
-              </a>,
-            ])}
           </div>
         </div>
       </div>
