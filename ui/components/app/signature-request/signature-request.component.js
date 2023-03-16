@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { memoize } from 'lodash';
 import PropTypes from 'prop-types';
-import LedgerInstructionField from '../ledger-instruction-field';
+// import LedgerInstructionField from '../ledger-instruction-field';
 import { sanitizeMessage, getURLHostName } from '../../../helpers/utils/util';
 import { EVENT } from '../../../../shared/constants/metametrics';
 import SiteOrigin from '../../ui/site-origin';
@@ -43,7 +43,7 @@ export default class SignatureRequest extends PureComponent {
     /**
      * Check if the wallet is ledget wallet or not
      */
-    isLedgerWallet: PropTypes.bool,
+    // isLedgerWallet: PropTypes.bool,
     /**
      * Handler for cancel button
      */
@@ -154,7 +154,7 @@ export default class SignatureRequest extends PureComponent {
       fromAccount: { address, balance, name },
       cancel,
       sign,
-      isLedgerWallet,
+      // isLedgerWallet,
       hardwareWalletRequiresConnection,
       chainId,
       rpcPrefs,
@@ -302,11 +302,11 @@ export default class SignatureRequest extends PureComponent {
             </div>
           ) : null}
         </div>
-        {isLedgerWallet ? (
+        {/* {isLedgerWallet ? (
           <div className="confirm-approve-content__ledger-instruction-wrapper">
             <LedgerInstructionField showDataInstruction />
           </div>
-        ) : null}
+        ) : null} */}
         <Message
           data={sanitizedMessage}
           onMessageScrolled={() => this.setState({ hasScrolledMessage: true })}

@@ -41,7 +41,7 @@ import {
 } from '../../selectors';
 import { getMostRecentOverviewPage } from '../../ducks/history/history';
 import {
-  isAddressLedger,
+  // isAddressLedger,
   updateGasFees,
   getIsGasEstimatesLoading,
   getNativeCurrency,
@@ -197,7 +197,7 @@ const mapStateToProps = (state, ownProps) => {
   const gasFeeIsCustom =
     fullTxData.userFeeLevel === CUSTOM_GAS_ESTIMATE ||
     txParamsAreDappSuggested(fullTxData);
-  const fromAddressIsLedger = isAddressLedger(state, fromAddress);
+  // const fromAddressIsLedger = isAddressLedger(state, fromAddress);
   const nativeCurrency = getNativeCurrency(state);
 
   const hardwareWalletRequiresConnection =
@@ -250,7 +250,7 @@ const mapStateToProps = (state, ownProps) => {
     maxPriorityFeePerGas: gasEstimationObject.maxPriorityFeePerGas,
     baseFeePerGas: gasEstimationObject.baseFeePerGas,
     gasFeeIsCustom,
-    showLedgerSteps: fromAddressIsLedger,
+    showLedgerSteps: false,
     nativeCurrency,
     hardwareWalletRequiresConnection,
     isMultiLayerFeeNetwork,
