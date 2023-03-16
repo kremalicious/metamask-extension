@@ -1,5 +1,28 @@
 # MetaMask Browser Extension
 
+**Minimalized version of MetaMask for my own personal use without the myriad of banners & buttons I will never use. Don't blindly trust me and double check the changes before installing this in your own browser.**
+
+Notable changes compared to upstream:
+
+- tweaked overall typography defaulting to system font Avenir Next (will only work on macOS)
+- hide all those unneccessary nagging banners, like Ledger connection instructions (have connected it for many years) or network is busy (it always is)
+- NFT tab enabled by default
+- UX improvements around account dropdown when many accounts are in there
+- UX improvements around network dropdown
+- remove all the Buy, Swap etc. buttons, replace remaining Send with text only
+- remove all "contact support" banners
+
+Quickstart:
+
+```bash
+yarn
+
+# outputs installable extension into ./builds
+yarn dist
+```
+
+---
+
 You can find the latest version of MetaMask on [our official website](https://metamask.io/). For help using MetaMask, visit our [User Support Site](https://metamask.zendesk.com/hc/en-us).
 
 For [general questions](https://community.metamask.io/c/learn/26), [feature requests](https://community.metamask.io/c/feature-requests-ideas/13), or [developer questions](https://community.metamask.io/c/developer-questions/11), visit our [Community Forum](https://community.metamask.io/).
