@@ -15,7 +15,7 @@ const TransactionAlerts = ({
   userAcknowledgedGasMissing,
   setUserAcknowledgedGasMissing,
 }) => {
-  const { estimateUsed, hasSimulationError, supportsEIP1559, isNetworkBusy } =
+  const { estimateUsed, hasSimulationError, supportsEIP1559 } =
     useGasFeeContext();
   const pendingTransactions = useSelector(submittedPendingTransactionsSelector);
   const t = useI18nContext();
@@ -60,11 +60,11 @@ const TransactionAlerts = ({
           {t('lowPriorityMessage')}
         </BannerAlert>
       )}
-      {supportsEIP1559 && isNetworkBusy ? (
+      {/* {supportsEIP1559 && isNetworkBusy ? (
         <BannerAlert severity={SEVERITIES.WARNING}>
           {t('networkIsBusy')}
         </BannerAlert>
-      ) : null}
+      ) : null} */}
     </div>
   );
 };
