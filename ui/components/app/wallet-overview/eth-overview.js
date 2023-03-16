@@ -21,17 +21,11 @@ import { MetaMetricsContext } from '../../../contexts/metametrics';
 import {
   EVENT,
   EVENT_NAMES,
-  CONTEXT_PROPS,
+  // CONTEXT_PROPS,
 } from '../../../../shared/constants/metametrics';
 import Spinner from '../../ui/spinner';
 import { startNewDraftTransaction } from '../../../ducks/send';
 import { AssetType } from '../../../../shared/constants/transaction';
-import {
-  ButtonIcon,
-  BUTTON_ICON_SIZES,
-  ICON_NAMES,
-} from '../../component-library';
-import { IconColor } from '../../../helpers/constants/design-system';
 import WalletOverview from './wallet-overview';
 
 const EthOverview = ({ className }) => {
@@ -76,34 +70,6 @@ const EthOverview = ({ className }) => {
               {balanceIsCached ? (
                 <span className="eth-overview__cached-star">*</span>
               ) : null}
-              <ButtonIcon
-                className="eth-overview__portfolio-button"
-                data-testid="home__portfolio-site"
-                color={IconColor.primaryDefault}
-                iconName={ICON_NAMES.DIAGRAM}
-                ariaLabel={t('portfolio')}
-                size={BUTTON_ICON_SIZES.LG}
-                onClick={() => {
-                  const portfolioUrl = process.env.PORTFOLIO_URL;
-                  global.platform.openTab({
-                    url: `${portfolioUrl}?metamaskEntry=ext`,
-                  });
-                  trackEvent(
-                    {
-                      category: EVENT.CATEGORIES.HOME,
-                      event: EVENT_NAMES.PORTFOLIO_LINK_CLICKED,
-                      properties: {
-                        url: portfolioUrl,
-                      },
-                    },
-                    {
-                      contextPropsIntoEventProperties: [
-                        CONTEXT_PROPS.PAGE_TITLE,
-                      ],
-                    },
-                  );
-                }}
-              />
             </div>
             {showFiat && balance && (
               <UserPreferencedCurrencyDisplay
