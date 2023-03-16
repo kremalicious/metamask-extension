@@ -22,7 +22,7 @@ import AccountMenu from './account-menu.component';
 /**
  * The min amount of accounts to show search field
  */
-const SHOW_SEARCH_ACCOUNTS_MIN_COUNT = 5;
+const SHOW_SEARCH_ACCOUNTS_MIN_COUNT = 15;
 
 function mapStateToProps(state) {
   const {

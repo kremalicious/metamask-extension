@@ -6,8 +6,6 @@ import { shortenAddress } from '../../../helpers/utils/util';
 import Tooltip from '../../ui/tooltip';
 import { toChecksumHexAddress } from '../../../../shared/modules/hexstring-utils';
 import { SECOND } from '../../../../shared/constants/time';
-import { Icon, ICON_NAMES, ICON_SIZES } from '../../component-library';
-import { IconColor } from '../../../helpers/constants/design-system';
 
 class SelectedAccount extends Component {
   state = {
@@ -64,17 +62,6 @@ class SelectedAccount extends Component {
             </div>
             <div className="selected-account__address">
               {shortenAddress(checksummedAddress)}
-              <div className="selected-account__copy">
-                <Icon
-                  name={
-                    this.state.copied
-                      ? ICON_NAMES.COPY_SUCCESS
-                      : ICON_NAMES.COPY
-                  }
-                  size={ICON_SIZES.SM}
-                  color={IconColor.iconAlternative}
-                />
-              </div>
             </div>
           </button>
         </Tooltip>
