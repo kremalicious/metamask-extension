@@ -1,6 +1,10 @@
 .asset-list-item {
   & .list-item__heading {
     max-width: 100%;
+
+    & h2 {
+      @include H5;
+    }
   }
 
   &__token-button {
@@ -11,6 +15,7 @@
     color: var(--color-text-default);
 
     & h2 {
+      @include H6;
       display: flex;
     }
 
@@ -34,9 +39,10 @@
   }
 
   .list-item__subheading {
-    @include H6;
-
-    margin-top: 6px;
+    & h3 {
+      @include H6;
+      font-weight: 400;
+    }
   }
 
   &__warning {
