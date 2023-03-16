@@ -1,13 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
-///: BEGIN:ONLY_INCLUDE_IN(main)
-import {
-  EVENT,
-  EVENT_NAMES,
-  CONTEXT_PROPS,
-} from '../../../shared/constants/metametrics';
-///: END:ONLY_INCLUDE_IN
 import AssetList from '../../components/app/asset-list';
 import NftsTab from '../../components/app/nfts-tab';
 import HomeNotification from '../../components/app/home-notification';
@@ -54,15 +47,7 @@ import {
   ONBOARDING_SECURE_YOUR_WALLET_ROUTE,
 } from '../../helpers/constants/routes';
 import ZENDESK_URLS from '../../helpers/constants/zendesk-url';
-///: BEGIN:ONLY_INCLUDE_IN(main)
-import { SUPPORT_LINK } from '../../../shared/lib/ui-utils';
-///: END:ONLY_INCLUDE_IN
-///: BEGIN:ONLY_INCLUDE_IN(beta)
-import BetaHomeFooter from './beta/beta-home-footer.component';
-///: END:ONLY_INCLUDE_IN
-///: BEGIN:ONLY_INCLUDE_IN(flask)
-import FlaskHomeFooter from './flask/flask-home-footer.component';
-///: END:ONLY_INCLUDE_IN
+import OpenSeaWhatsNewPopover from '../../components/app/open-sea-whats-new-popover/open-sea-whats-new-popover';
 
 function shouldCloseNotificationPopup({
   isNotification,
@@ -687,48 +672,6 @@ export default class Home extends PureComponent {
                 <TransactionList />
               </Tab>
             </Tabs>
-            <div className="home__support">
-              {
-                ///: BEGIN:ONLY_INCLUDE_IN(main)
-                t('needHelp', [
-                  <a
-                    href={SUPPORT_LINK}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    key="need-help-link"
-                    onClick={() => {
-                      this.context.trackEvent(
-                        {
-                          category: EVENT.CATEGORIES.HOME,
-                          event: EVENT_NAMES.SUPPORT_LINK_CLICKED,
-                          properties: {
-                            url: SUPPORT_LINK,
-                          },
-                        },
-                        {
-                          contextPropsIntoEventProperties: [
-                            CONTEXT_PROPS.PAGE_TITLE,
-                          ],
-                        },
-                      );
-                    }}
-                  >
-                    {t('needHelpLinkText')}
-                  </a>,
-                ])
-                ///: END:ONLY_INCLUDE_IN
-              }
-              {
-                ///: BEGIN:ONLY_INCLUDE_IN(beta)
-                <BetaHomeFooter />
-                ///: END:ONLY_INCLUDE_IN
-              }
-              {
-                ///: BEGIN:ONLY_INCLUDE_IN(flask)
-                <FlaskHomeFooter />
-                ///: END:ONLY_INCLUDE_IN
-              }
-            </div>
           </div>
 
           {this.renderNotifications()}
