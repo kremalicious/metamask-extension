@@ -29,10 +29,6 @@ export default class UnlockPage extends Component {
      */
     isUnlocked: PropTypes.bool,
     /**
-     * onClick handler for "Forgot password?" link
-     */
-    onRestore: PropTypes.func,
-    /**
      * onSubmit handler when form is submitted
      */
     onSubmit: PropTypes.func,
@@ -151,7 +147,6 @@ export default class UnlockPage extends Component {
   render() {
     const { password, error } = this.state;
     const { t } = this.context;
-    const { onRestore } = this.props;
 
     return (
       <div className="unlock-page__container">
@@ -184,16 +179,6 @@ export default class UnlockPage extends Component {
             />
           </form>
           {this.renderSubmitButton()}
-          <div className="unlock-page__links">
-            <Button
-              type="link"
-              key="import-account"
-              className="unlock-page__link"
-              onClick={() => onRestore()}
-            >
-              {t('forgotPassword')}
-            </Button>
-          </div>
         </div>
       </div>
     );
