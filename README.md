@@ -2,6 +2,8 @@
 
 > 🦊 Minimalized version of MetaMask for my own personal use without the myriad of banners & buttons I will never use, and without that terrible Roboto typeface.
 
+<img width="250" alt="Screenshot 2023-03-17 at 12 53 19" src="https://user-images.githubusercontent.com/90316/225910114-1e775b8b-de6d-45f5-bce3-d70da30cd30f.png">
+
 **Don't blindly trust me and double check the changes before installing this in your own browser.**
 
 [**Compare code changes →**](https://github.com/MetaMask/metamask-extension/compare/develop...kremalicious:metamask-extension:minimal)
@@ -10,7 +12,7 @@
 
 - tweaked overall typography defaulting to system font Avenir Next on macOS, respective default system font on all other OS
 - hide all those unneccessary nagging banners, like *Ledger connection instructions* or *network is busy* (it always is)
-- minimal lock screen
+- minimal unlock screen
 - NFT tab enabled by default
 - UX improvements around account dropdown when many accounts are in there
 - UX improvements around network dropdown
