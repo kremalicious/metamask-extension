@@ -3,6 +3,13 @@
   color: var(--color-text-default) !important;
 }
 
+.MuiInputBase-root,
+div.MuiInputBase-root,
+.MuiFormLabel-root,
+label.MuiFormLabel-root {
+  font-family: $font-family !important;
+}
+
 .MuiFormHelperText-root.Mui-error {
   @include H7;
 
