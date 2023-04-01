@@ -88,109 +88,27 @@ const EthOverview = ({ className }) => {
         </Tooltip>
       }
       buttons={
-        <>
-          <IconButton
-            className="eth-overview__button"
-            data-testid="eth-overview-send"
-            label={t('send')}
-            onClick={() => {
-              trackEvent({
-                event: EVENT_NAMES.NAV_SEND_BUTTON_CLICKED,
-                category: EVENT.CATEGORIES.NAVIGATION,
-                properties: {
-                  token_symbol: 'ETH',
-                  location: 'Home',
-                  text: 'Send',
-                },
-              });
-              dispatch(
-                startNewDraftTransaction({ type: AssetType.native }),
-              ).then(() => {
+        <IconButton
+          className="eth-overview__button"
+          data-testid="eth-overview-send"
+          label={t('send')}
+          onClick={() => {
+            trackEvent({
+              event: EVENT_NAMES.NAV_SEND_BUTTON_CLICKED,
+              category: EVENT.CATEGORIES.NAVIGATION,
+              properties: {
+                token_symbol: 'ETH',
+                location: 'Home',
+                text: 'Send',
+              },
+            });
+            dispatch(startNewDraftTransaction({ type: AssetType.native })).then(
+              () => {
                 history.push(SEND_ROUTE);
-              });
-            }}
-          />
-          <IconButton
-            className="eth-overview__button"
-            disabled={!isSwapsChain}
-            Icon={
-              <Icon
-                name={ICON_NAMES.SWAP_HORIZONTAL}
-                color={IconColor.primaryInverse}
-              />
-            }
-            onClick={() => {
-              if (isSwapsChain) {
-                trackEvent({
-                  event: EVENT_NAMES.NAV_SWAP_BUTTON_CLICKED,
-                  category: EVENT.CATEGORIES.SWAPS,
-                  properties: {
-                    token_symbol: 'ETH',
-                    location: EVENT.SOURCE.SWAPS.MAIN_VIEW,
-                    text: 'Swap',
-                  },
-                });
-                dispatch(setSwapsFromToken(defaultSwapsToken));
-                if (usingHardwareWallet) {
-                  global.platform.openExtensionInBrowser(BUILD_QUOTE_ROUTE);
-                } else {
-                  history.push(BUILD_QUOTE_ROUTE);
-                }
-              }
-            }}
-            label={t('swap')}
-            tooltipRender={
-              isSwapsChain
-                ? null
-                : (contents) => (
-                    <Tooltip
-                      title={t('currentlyUnavailable')}
-                      position="bottom"
-                    >
-                      {contents}
-                    </Tooltip>
-                  )
-            }
-          />
-          <IconButton
-            className="eth-overview__button"
-            disabled={!isBridgeChain}
-            data-testid="eth-overview-bridge"
-            Icon={
-              <Icon name={ICON_NAMES.BRIDGE} color={IconColor.primaryInverse} />
-            }
-            label={t('bridge')}
-            onClick={() => {
-              if (isBridgeChain) {
-                const portfolioUrl = process.env.PORTFOLIO_URL;
-                const bridgeUrl = `${portfolioUrl}/bridge`;
-                global.platform.openTab({
-                  url: `${bridgeUrl}?metamaskEntry=ext`,
-                });
-                trackEvent({
-                  category: EVENT.CATEGORIES.NAVIGATION,
-                  event: EVENT_NAMES.BRIDGE_LINK_CLICKED,
-                  properties: {
-                    location: 'Home',
-                    text: 'Bridge',
-                  },
-                });
-              }
-            }}
-            tooltipRender={
-              isBridgeChain
-                ? null
-                : (contents) => (
-                    <Tooltip
-                      title={t('currentlyUnavailable')}
-                      position="bottom"
-                    >
-                      {contents}
-                    </Tooltip>
-                  )
-            }
-          />
-        </>
+              },
+            );
+          }}
+        />
       }
       className={className}
       icon={<Identicon diameter={32} image={primaryTokenImage} imageBorder />}
