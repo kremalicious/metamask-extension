@@ -5,11 +5,6 @@ import Button from '../../components/ui/button';
 import TextField from '../../components/ui/text-field';
 import Mascot from '../../components/ui/mascot';
 import { DEFAULT_ROUTE } from '../../helpers/constants/routes';
-import {
-  EVENT,
-  EVENT_NAMES,
-  // CONTEXT_PROPS,
-} from '../../../shared/constants/metametrics';
 import { isBeta } from '../../helpers/utils/build-types';
 import { getCaretCoordinates } from './unlock-page.util';
 
@@ -73,31 +68,11 @@ export default class UnlockPage extends Component {
 
     try {
       await onSubmit(password);
-      this.context.trackEvent(
-        {
-          category: EVENT.CATEGORIES.NAVIGATION,
-          event: EVENT_NAMES.APP_UNLOCKED,
-          properties: {
-            failed_attempts: this.failed_attempts,
-          },
-        },
-        {
-          isNewVisit: true,
-        },
-      );
     } catch ({ message }) {
       this.failed_attempts += 1;
 
       if (message === 'Incorrect password') {
         await forceUpdateMetamaskState();
-        this.context.trackEvent({
-          category: EVENT.CATEGORIES.NAVIGATION,
-          event: EVENT_NAMES.APP_UNLOCKED_FAILED,
-          properties: {
-            reason: 'incorrect_password',
-            failed_attempts: this.failed_attempts,
-          },
-        });
       }
 
       this.setState({ error: message });

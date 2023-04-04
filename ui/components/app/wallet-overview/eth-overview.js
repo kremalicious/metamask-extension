@@ -17,12 +17,6 @@ import {
   getSelectedAccountCachedBalance,
 } from '../../../selectors';
 import IconButton from '../../ui/icon-button';
-import { MetaMetricsContext } from '../../../contexts/metametrics';
-import {
-  EVENT,
-  EVENT_NAMES,
-  // CONTEXT_PROPS,
-} from '../../../../shared/constants/metametrics';
 import Spinner from '../../ui/spinner';
 import { startNewDraftTransaction } from '../../../ducks/send';
 import { AssetType } from '../../../../shared/constants/transaction';
@@ -31,7 +25,6 @@ import WalletOverview from './wallet-overview';
 const EthOverview = ({ className }) => {
   const dispatch = useDispatch();
   const t = useContext(I18nContext);
-  const trackEvent = useContext(MetaMetricsContext);
   const history = useHistory();
   const balanceIsCached = useSelector(isBalanceCached);
   const showFiat = useSelector(getShouldShowFiat);
@@ -93,15 +86,6 @@ const EthOverview = ({ className }) => {
           data-testid="eth-overview-send"
           label={t('send')}
           onClick={() => {
-            trackEvent({
-              event: EVENT_NAMES.NAV_SEND_BUTTON_CLICKED,
-              category: EVENT.CATEGORIES.NAVIGATION,
-              properties: {
-                token_symbol: 'ETH',
-                location: 'Home',
-                text: 'Send',
-              },
-            });
             dispatch(startNewDraftTransaction({ type: AssetType.native })).then(
               () => {
                 history.push(SEND_ROUTE);
