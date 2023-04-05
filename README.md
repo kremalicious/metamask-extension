@@ -13,7 +13,6 @@
 - tweaked overall typography defaulting to system font Avenir Next on macOS, respective default system font on all other OS
 - hide all those unneccessary nagging banners, like *Ledger connection instructions* or *network is busy* (it always is)
 - minimal unlock screen
-- NFT tab enabled by default
 - UX improvements around account dropdown when many accounts are in there
 - UX improvements around network dropdown
 - remove all the *Buy*, *Swap* etc. buttons, replace remaining *Send* with text only
@@ -27,6 +26,8 @@ yarn
 # outputs installable extension into ./builds
 yarn dist
 ```
+
+Original README follows:
 
 ---
 

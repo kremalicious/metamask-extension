@@ -32,12 +32,8 @@ import {
   ADD_POPULAR_CUSTOM_NETWORK,
   ADVANCED_ROUTE,
 } from '../../../helpers/constants/routes';
-import {
-  Icon,
-  // ButtonIcon,
-  ICON_NAMES,
-  // ICON_SIZES,
-} from '../../component-library';
+import { Icon, ICON_NAMES } from '../../component-library/icon/deprecated';
+
 import { Dropdown, DropdownMenuItem } from './dropdown';
 
 // classes from nodes of the toggle element.
