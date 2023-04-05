@@ -1,6 +1,11 @@
 @use "design-system";
 @use "sass:map";
 
+:root {
+  // needs !important sledgehammer as this file gets inlined earlier than design-system tokens. Also can't use the $font-family SASS variable here.
+  --font-family-sans: 'Avenir Next', -apple-system, BlinkMacSystemFont, 'Segoe UI','Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji' !important;
+}
+
 $text-variants: (
   display: ("md"),
   heading: ( "sm", "md", "lg"),
@@ -25,8 +30,6 @@ $text-variants: (
     letter-spacing: var(--typography-l-#{$type}-#{$size}-letter-spacing);
   }
 }
-
-
 
 .mm-text {
   // Set default styles
