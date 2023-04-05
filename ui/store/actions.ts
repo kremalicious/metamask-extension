@@ -3948,32 +3948,6 @@ export function setConnectedStatusPopoverHasBeenShown(): ThunkAction<
   };
 }
 
-export function setRecoveryPhraseReminderHasBeenShown() {
-  return () => {
-    callBackgroundMethod('setRecoveryPhraseReminderHasBeenShown', [], (err) => {
-      if (isErrorWithMessage(err)) {
-        throw new Error(err.message);
-      }
-    });
-  };
-}
-
-export function setRecoveryPhraseReminderLastShown(
-  lastShown: number,
-): ThunkAction<void, MetaMaskReduxState, unknown, AnyAction> {
-  return () => {
-    callBackgroundMethod(
-      'setRecoveryPhraseReminderLastShown',
-      [lastShown],
-      (err) => {
-        if (isErrorWithMessage(err)) {
-          throw new Error(err.message);
-        }
-      },
-    );
-  };
-}
-
 export function setOutdatedBrowserWarningLastShown(lastShown: number) {
   return async () => {
     await submitRequestToBackground('setOutdatedBrowserWarningLastShown', [

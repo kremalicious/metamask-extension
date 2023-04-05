@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import ImportTokenLink from '../import-token-link';
@@ -23,11 +23,6 @@ import {
   TEXT_ALIGN,
 } from '../../../helpers/constants/design-system';
 import { useI18nContext } from '../../../hooks/useI18nContext';
-import { MetaMetricsContext } from '../../../contexts/metametrics';
-import {
-  MetaMetricsEventCategory,
-  MetaMetricsEventName,
-} from '../../../../shared/constants/metametrics';
 import DetectedToken from '../detected-token/detected-token';
 import {
   DetectedTokensBanner,
@@ -45,7 +40,6 @@ const AssetList = ({ onClickAsset }) => {
   const selectedAccountBalance = useSelector(getSelectedAccountCachedBalance);
   const nativeCurrency = useSelector(getNativeCurrency);
   const showFiat = useSelector(getShouldShowFiat);
-  const trackEvent = useContext(MetaMetricsContext);
   const balance = useSelector(getSelectedAccountCachedBalance);
   const balanceIsLoading = !balance;
 
@@ -112,14 +106,6 @@ const AssetList = ({ onClickAsset }) => {
       <TokenList
         onTokenClick={(tokenAddress) => {
           onClickAsset(tokenAddress);
-          trackEvent({
-            event: MetaMetricsEventName.TokenScreenOpened,
-            category: MetaMetricsEventCategory.Navigation,
-            properties: {
-              token_symbol: primaryCurrencyProperties.suffix,
-              location: 'Home',
-            },
-          });
         }}
       />
       {detectedTokens.length > 0 &&

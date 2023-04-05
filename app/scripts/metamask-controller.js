@@ -1983,14 +1983,6 @@ export default class MetamaskController extends EventEmitter {
         appStateController.setConnectedStatusPopoverHasBeenShown.bind(
           appStateController,
         ),
-      setRecoveryPhraseReminderHasBeenShown:
-        appStateController.setRecoveryPhraseReminderHasBeenShown.bind(
-          appStateController,
-        ),
-      setRecoveryPhraseReminderLastShown:
-        appStateController.setRecoveryPhraseReminderLastShown.bind(
-          appStateController,
-        ),
       setOutdatedBrowserWarningLastShown:
         appStateController.setOutdatedBrowserWarningLastShown.bind(
           appStateController,

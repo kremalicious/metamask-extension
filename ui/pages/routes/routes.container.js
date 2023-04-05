@@ -10,7 +10,6 @@ import {
   getTheme,
   getIsTestnet,
   getCurrentChainId,
-  getShouldShowSeedPhraseReminder,
   isCurrentProviderCustom,
 } from '../../selectors';
 import {
@@ -52,7 +51,6 @@ function mapStateToProps(state) {
     allAccountsOnNetworkAreEmpty: getAllAccountsOnNetworkAreEmpty(state),
     isTestNet: getIsTestnet(state),
     currentChainId: getCurrentChainId(state),
-    shouldShowSeedPhraseReminder: getShouldShowSeedPhraseReminder(state),
     forgottenPassword: state.metamask.forgottenPassword,
     isCurrentProviderCustom: isCurrentProviderCustom(state),
     completedOnboarding,

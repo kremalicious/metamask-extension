@@ -15,7 +15,6 @@ import ConnectedAccounts from '../connected-accounts';
 import { Tabs, Tab } from '../../components/ui/tabs';
 import { EthOverview } from '../../components/app/wallet-overview';
 import WhatsNewPopup from '../../components/app/whats-new-popup';
-import RecoveryPhraseReminder from '../../components/app/recovery-phrase-reminder';
 import ActionableMessage from '../../components/ui/actionable-message/actionable-message';
 import {
   FONT_WEIGHT,
@@ -44,7 +43,6 @@ import {
   VIEW_QUOTE_ROUTE,
   CONFIRMATION_V_NEXT_ROUTE,
   ADD_NFT_ROUTE,
-  ONBOARDING_SECURE_YOUR_WALLET_ROUTE,
 } from '../../helpers/constants/routes';
 import ZENDESK_URLS from '../../helpers/constants/zendesk-url';
 
@@ -71,7 +69,6 @@ export default class Home extends PureComponent {
     forgottenPassword: PropTypes.bool,
     suggestedAssets: PropTypes.array,
     unconfirmedTransactionsCount: PropTypes.number,
-    shouldShowSeedPhraseReminder: PropTypes.bool.isRequired,
     isPopup: PropTypes.bool,
     isNotification: PropTypes.bool.isRequired,
     firstPermissionsRequestId: PropTypes.string,
@@ -101,21 +98,8 @@ export default class Home extends PureComponent {
     shouldShowErrors: PropTypes.bool.isRequired,
     removeSnapError: PropTypes.func.isRequired,
     ///: END:ONLY_INCLUDE_IN
-    showRecoveryPhraseReminder: PropTypes.bool.isRequired,
-    setRecoveryPhraseReminderHasBeenShown: PropTypes.func.isRequired,
-    setRecoveryPhraseReminderLastShown: PropTypes.func.isRequired,
     showOutdatedBrowserWarning: PropTypes.bool.isRequired,
     setOutdatedBrowserWarningLastShown: PropTypes.func.isRequired,
-    seedPhraseBackedUp: (props) => {
-      if (
-        props.seedPhraseBackedUp !== null &&
-        typeof props.seedPhraseBackedUp !== 'boolean'
-      ) {
-        throw new Error(
-          `seedPhraseBackedUp is required to be null or boolean. Received ${props.seedPhraseBackedUp}`,
-        );
-      }
-    },
     newNetworkAddedName: PropTypes.string,
     // This prop is used in the `shouldCloseNotificationPopup` function
     // eslint-disable-next-line react/no-unused-prop-types
@@ -218,15 +202,6 @@ export default class Home extends PureComponent {
     }
   }
 
-  onRecoveryPhraseReminderClose = () => {
-    const {
-      setRecoveryPhraseReminderHasBeenShown,
-      setRecoveryPhraseReminderLastShown,
-    } = this.props;
-    setRecoveryPhraseReminderHasBeenShown(true);
-    setRecoveryPhraseReminderLastShown(new Date().getTime());
-  };
-
   onOutdatedBrowserWarningClose = () => {
     const { setOutdatedBrowserWarningLastShown } = this.props;
     setOutdatedBrowserWarningLastShown(new Date().getTime());
@@ -236,9 +211,6 @@ export default class Home extends PureComponent {
     const { t } = this.context;
 
     const {
-      history,
-      shouldShowSeedPhraseReminder,
-      isPopup,
       shouldShowWeb3ShimUsageNotification,
       setWeb3ShimUsageAlertDismissed,
       originOfCurrentTab,
@@ -433,22 +405,6 @@ export default class Home extends PureComponent {
             key="home-web3ShimUsageNotification"
           />
         ) : null}
-        {shouldShowSeedPhraseReminder ? (
-          <HomeNotification
-            descriptionText={t('backupApprovalNotice')}
-            acceptText={t('backupNow')}
-            onAccept={() => {
-              const backUpSRPRoute = `${ONBOARDING_SECURE_YOUR_WALLET_ROUTE}/?isFromReminder=true`;
-              if (isPopup) {
-                global.platform.openExtensionInBrowser(backUpSRPRoute);
-              } else {
-                history.push(backUpSRPRoute);
-              }
-            }}
-            infoText={t('backupApprovalInfo')}
-            key="home-backupApprovalNotice"
-          />
-        ) : null}
         {infuraBlocked && this.state.canShowBlockageNotification ? (
           <HomeNotification
             descriptionText={t('infuraBlockedNotification', [
@@ -584,8 +540,6 @@ export default class Home extends PureComponent {
       announcementsToShow,
       showWhatsNewPopup,
       hideWhatsNewPopup,
-      seedPhraseBackedUp,
-      showRecoveryPhraseReminder,
       firstTimeFlowType,
       completedOnboarding,
       onboardedInThisUISession,
@@ -615,12 +569,6 @@ export default class Home extends PureComponent {
         />
         <div className="home__container">
           {showWhatsNew ? <WhatsNewPopup onClose={hideWhatsNewPopup} /> : null}
-          {!showWhatsNew && showRecoveryPhraseReminder ? (
-            <RecoveryPhraseReminder
-              hasBackedUp={seedPhraseBackedUp}
-              onConfirm={this.onRecoveryPhraseReminderClose}
-            />
-          ) : null}
           {isPopup && !connectedStatusPopoverHasBeenShown
             ? this.renderPopover()
             : null}

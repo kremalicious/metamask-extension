@@ -145,26 +145,6 @@ export default class AppStateController extends EventEmitter {
   }
 
   /**
-   * Record that the user has been shown the recovery phrase reminder.
-   */
-  setRecoveryPhraseReminderHasBeenShown() {
-    this.store.updateState({
-      recoveryPhraseReminderHasBeenShown: true,
-    });
-  }
-
-  /**
-   * Record the timestamp of the last time the user has seen the recovery phrase reminder
-   *
-   * @param {number} lastShown - timestamp when user was last shown the reminder.
-   */
-  setRecoveryPhraseReminderLastShown(lastShown) {
-    this.store.updateState({
-      recoveryPhraseReminderLastShown: lastShown,
-    });
-  }
-
-  /**
    * Record the timestamp of the last time the user has seen the outdated browser warning
    *
    * @param {number} lastShown - Timestamp (in milliseconds) of when the user was last shown the warning.

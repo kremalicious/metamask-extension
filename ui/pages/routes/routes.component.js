@@ -122,7 +122,6 @@ export default class Routes extends Component {
     allAccountsOnNetworkAreEmpty: PropTypes.bool,
     isTestNet: PropTypes.bool,
     currentChainId: PropTypes.string,
-    shouldShowSeedPhraseReminder: PropTypes.bool,
     forgottenPassword: PropTypes.bool,
     isCurrentProviderCustom: PropTypes.bool,
     completedOnboarding: PropTypes.bool,
@@ -431,7 +430,6 @@ export default class Routes extends Component {
       allAccountsOnNetworkAreEmpty,
       isTestNet,
       currentChainId,
-      shouldShowSeedPhraseReminder,
       isCurrentProviderCustom,
       completedOnboarding,
       isAccountMenuOpen,
@@ -454,9 +452,7 @@ export default class Routes extends Component {
     const windowType = getEnvironmentType();
 
     const shouldShowNetworkDeprecationWarning =
-      windowType !== ENVIRONMENT_TYPE_NOTIFICATION &&
-      isUnlocked &&
-      !shouldShowSeedPhraseReminder;
+      windowType !== ENVIRONMENT_TYPE_NOTIFICATION && isUnlocked;
 
     return (
       <div

@@ -16,14 +16,12 @@ import {
   getInfuraBlocked,
   getShowWhatsNewPopup,
   getSortedAnnouncementsToShow,
-  getShowRecoveryPhraseReminder,
   getShowOutdatedBrowserWarning,
   getNewNetworkAdded,
   hasUnsignedQRHardwareTransaction,
   hasUnsignedQRHardwareMessage,
   getNewNftAddedMessage,
   getNewTokensImported,
-  getShouldShowSeedPhraseReminder,
   getRemoveNftMessage,
 } from '../../selectors';
 
@@ -33,8 +31,6 @@ import {
   setDefaultHomeActiveTabName,
   setWeb3ShimUsageAlertDismissed,
   setAlertEnabledness,
-  setRecoveryPhraseReminderHasBeenShown,
-  setRecoveryPhraseReminderLastShown,
   setOutdatedBrowserWarningLastShown,
   setNewNetworkAdded,
   setNewNftAddedMessage,
@@ -111,7 +107,6 @@ const mapStateToProps = (state) => {
     suggestedAssets,
     swapsEnabled,
     unconfirmedTransactionsCount: unconfirmedTransactionsCountSelector(state),
-    shouldShowSeedPhraseReminder: getShouldShowSeedPhraseReminder(state),
     isPopup,
     isNotification,
     selectedAddress,
@@ -135,7 +130,6 @@ const mapStateToProps = (state) => {
     shouldShowErrors: Object.entries(metamask.snapErrors || []).length > 0,
     ///: END:ONLY_INCLUDE_IN
     showWhatsNewPopup: getShowWhatsNewPopup(state),
-    showRecoveryPhraseReminder: getShowRecoveryPhraseReminder(state),
     showOutdatedBrowserWarning:
       getIsBrowserDeprecated() && getShowOutdatedBrowserWarning(state),
     seedPhraseBackedUp,
@@ -162,10 +156,6 @@ const mapDispatchToProps = (dispatch) => ({
   disableWeb3ShimUsageAlert: () =>
     setAlertEnabledness(AlertTypes.web3ShimUsage, false),
   hideWhatsNewPopup: () => dispatch(hideWhatsNewPopup()),
-  setRecoveryPhraseReminderHasBeenShown: () =>
-    dispatch(setRecoveryPhraseReminderHasBeenShown()),
-  setRecoveryPhraseReminderLastShown: (lastShown) =>
-    dispatch(setRecoveryPhraseReminderLastShown(lastShown)),
   setOutdatedBrowserWarningLastShown: (lastShown) => {
     dispatch(setOutdatedBrowserWarningLastShown(lastShown));
   },

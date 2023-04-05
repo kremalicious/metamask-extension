@@ -992,18 +992,6 @@ export function getSortedAnnouncementsToShow(state) {
   return announcementsSortedByDate;
 }
 
-export function getShowRecoveryPhraseReminder(state) {
-  const {
-    recoveryPhraseReminderLastShown,
-    recoveryPhraseReminderHasBeenShown,
-  } = state.metamask;
-
-  const currentTime = new Date().getTime();
-  const frequency = recoveryPhraseReminderHasBeenShown ? DAY * 90 : DAY * 2;
-
-  return currentTime - recoveryPhraseReminderLastShown >= frequency;
-}
-
 export function getShowOutdatedBrowserWarning(state) {
   const { outdatedBrowserWarningLastShown } = state.metamask;
   if (!outdatedBrowserWarningLastShown) {
@@ -1383,17 +1371,6 @@ export function getAllAccountsOnNetworkAreEmpty(state) {
   const hasNoTokens = getNumberOfTokens(state) === 0;
 
   return hasNoNativeFundsOnAnyAccounts && hasNoTokens;
-}
-
-export function getShouldShowSeedPhraseReminder(state) {
-  const { tokens, seedPhraseBackedUp, dismissSeedBackUpReminder } =
-    state.metamask;
-  const accountBalance = getCurrentEthBalance(state) ?? 0;
-  return (
-    seedPhraseBackedUp === false &&
-    (parseInt(accountBalance, 16) > 0 || tokens.length > 0) &&
-    dismissSeedBackUpReminder === false
-  );
 }
 
 export function getCustomTokenAmount(state) {
