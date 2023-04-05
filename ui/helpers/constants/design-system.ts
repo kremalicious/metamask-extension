@@ -212,7 +212,7 @@ export enum BorderRadius {
   LG = 'lg',
   XL = 'xl',
   none = 'none',
-  pill = 'pill',
+  pill = 'md',
   full = 'full',
 }
 

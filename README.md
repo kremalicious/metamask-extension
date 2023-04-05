@@ -2,7 +2,7 @@
 
 > 🦊 Minimalized version of MetaMask for my own personal use without the myriad of banners & buttons I will never use, and without that terrible Roboto typeface.
 
-<img width="250" alt="Screenshot 2023-03-17 at 12 53 19" src="https://user-images.githubusercontent.com/90316/225910114-1e775b8b-de6d-45f5-bce3-d70da30cd30f.png">
+<img width="250" alt="Screenshot 2023-04-05 at 19 58 35" src="https://user-images.githubusercontent.com/90316/230178834-31b92326-70d8-4ff0-82d3-c0c03f53f1e9.png">
 
 **Don't blindly trust me and double check the changes before installing this in your own browser.**
 

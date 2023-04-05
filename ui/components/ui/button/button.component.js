@@ -7,7 +7,6 @@ const CLASSNAME_PRIMARY = 'btn-primary';
 const CLASSNAME_SECONDARY = 'btn-secondary';
 const CLASSNAME_RAISED = 'btn-raised';
 const CLASSNAME_LARGE = 'btn--large';
-const CLASSNAME_ROUNDED = 'btn--rounded';
 const CLASSNAME_INLINE = 'btn--inline';
 
 const typeHash = {
@@ -29,10 +28,8 @@ const Button = ({
   children,
   icon,
   className,
-  rounded = true,
   ...buttonProps
 }) => {
-  const doRounding = rounded && type !== 'link' && type !== 'inline';
   // To support using the Button component to render styled links that are semantic html
   // we swap the html tag we use to render this component and delete any buttonProps that
   // we know to be erroneous attributes for a link. We will likely want to extract Link
@@ -56,7 +53,6 @@ const Button = ({
     <Tag
       className={classnames(
         'button',
-        doRounding && CLASSNAME_ROUNDED,
         typeHash[type] || CLASSNAME_DEFAULT,
         large && CLASSNAME_LARGE,
         className,

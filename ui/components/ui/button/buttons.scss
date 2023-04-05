@@ -3,8 +3,6 @@
  */
 
 .button {
-  @include H6;
-
   font-weight: 600;
   padding: 0.75rem 1rem;
   display: flex;
@@ -160,8 +158,6 @@
 }
 
 .btn-link {
-  @include H4;
-
   color: var(--color-primary-default);
   cursor: pointer;
   background-color: transparent;
@@ -209,122 +205,6 @@ input[type="submit"][disabled] {
   opacity: 0.5;
 }
 
-.btn--rounded {
-  border-radius: 100px;
-  will-change: box-shadow;
-  transition: box-shadow cubic-bezier(0.6, -0.28, 0.735, 0.045) 200ms;
-
-  &:hover {
-    box-shadow: var(--shadow-size-sm) var(--color-shadow-default);
-  }
-
-  &.btn-secondary {
-    border: 1px solid var(--color-primary-default);
-
-    &:hover {
-      box-shadow: var(--shadow-size-sm) var(--color-primary-shadow);
-    }
-
-    &--disabled,
-    &[disabled] {
-      border-color: var(--color-primary-disabled);
-      color: var(--color-primary-disabled);
-    }
-
-    &:active {
-      border-color: var(--color-primary-alternative);
-    }
-  }
-
-  &.btn-default {
-    border: 1px solid var(--color-icon-default);
-
-    &:hover {
-      box-shadow: var(--shadow-size-sm) var(--color-shadow-default);
-    }
-
-    &--disabled,
-    &[disabled] {
-      border-color: var(--color-border-muted);
-      color: var(--color-text-muted);
-    }
-
-    &:active {
-      border-color: var(--color-text-alternative);
-    }
-  }
-
-  &.btn-danger {
-    border: 1px solid var(--color-error-default);
-
-    &:hover {
-      box-shadow: var(--shadow-size-sm) var(--color-error-shadow);
-    }
-
-    &--disabled,
-    &[disabled] {
-      border-color: var(--color-error-disabled);
-      color: var(--color-error-disabled);
-    }
-
-    &:active {
-      border-color: var(--color-error-alternative);
-    }
-  }
-
-  &.btn-warning {
-    border: 1px solid var(--color-warning-default);
-
-    &:hover {
-      box-shadow: var(--shadow-size-sm) var(--color-shadow-default);
-    }
-
-    &--disabled,
-    &[disabled] {
-      border-color: var(--color-warning-alternative);
-      color: var(--color-text-muted);
-    }
-
-    &:active {
-      border-color: var(--color-warning-alternative);
-    }
-  }
-
-  &.btn-primary {
-    background-color: var(--color-primary-default);
-
-    &:hover {
-      box-shadow: var(--shadow-size-sm) var(--color-primary-shadow);
-    }
-
-    &--disabled,
-    &[disabled] {
-      background-color: var(--color-primary-disabled);
-    }
-
-    &:active {
-      background-color: var(--color-primary-alternative);
-    }
-  }
-
-  &.btn-danger-primary {
-    background-color: var(--color-error-default);
-
-    &:hover {
-      box-shadow: var(--shadow-size-sm) var(--color-error-shadow);
-    }
-
-    &--disabled,
-    &[disabled] {
-      background-color: var(--color-error-disabled);
-    }
-
-    &:active {
-      background-color: var(--color-error-alternative);
-    }
-  }
-}
-
 .btn--inline {
   display: inline;
   padding: 0;
@@ -333,6 +213,7 @@ input[type="submit"][disabled] {
   color: var(--color-primary-default);
   cursor: pointer;
   background-color: transparent;
+  font-weight: 400;
 
   &:hover {
     color: var(--color-primary-alternative);
