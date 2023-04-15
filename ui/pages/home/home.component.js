@@ -16,7 +16,6 @@ import { Tabs, Tab } from '../../components/ui/tabs';
 import { EthOverview } from '../../components/app/wallet-overview';
 import WhatsNewPopup from '../../components/app/whats-new-popup';
 import TermsOfUsePopup from '../../components/app/terms-of-use-popup';
-import RecoveryPhraseReminder from '../../components/app/recovery-phrase-reminder';
 import ActionableMessage from '../../components/ui/actionable-message/actionable-message';
 import {
   FONT_WEIGHT,
@@ -101,9 +100,6 @@ export default class Home extends PureComponent {
     shouldShowErrors: PropTypes.bool.isRequired,
     removeSnapError: PropTypes.func.isRequired,
     ///: END:ONLY_INCLUDE_IN
-    showRecoveryPhraseReminder: PropTypes.bool.isRequired,
-    setRecoveryPhraseReminderHasBeenShown: PropTypes.func.isRequired,
-    setRecoveryPhraseReminderLastShown: PropTypes.func.isRequired,
     setTermsOfUseLastAgreed: PropTypes.func.isRequired,
     showOutdatedBrowserWarning: PropTypes.bool.isRequired,
     setOutdatedBrowserWarningLastShown: PropTypes.func.isRequired,
@@ -209,25 +205,9 @@ export default class Home extends PureComponent {
     }
   }
 
-  onRecoveryPhraseReminderClose = () => {
-    const {
-      setRecoveryPhraseReminderHasBeenShown,
-      setRecoveryPhraseReminderLastShown,
-    } = this.props;
-    setRecoveryPhraseReminderHasBeenShown(true);
-    setRecoveryPhraseReminderLastShown(new Date().getTime());
-  };
-
   onAcceptTermsOfUse = () => {
     const { setTermsOfUseLastAgreed } = this.props;
     setTermsOfUseLastAgreed(new Date().getTime());
-    this.context.trackEvent({
-      category: MetaMetricsEventCategory.Onboarding,
-      event: MetaMetricsEventName.TermsOfUseAccepted,
-      properties: {
-        location: 'Terms Of Use Popover',
-      },
-    });
   };
 
   onOutdatedBrowserWarningClose = () => {
@@ -569,8 +549,6 @@ export default class Home extends PureComponent {
       showWhatsNewPopup,
       hideWhatsNewPopup,
       showTermsOfUsePopup,
-      seedPhraseBackedUp,
-      showRecoveryPhraseReminder,
       firstTimeFlowType,
       completedOnboarding,
       onboardedInThisUISession,
@@ -604,12 +582,6 @@ export default class Home extends PureComponent {
         />
         <div className="home__container">
           {showWhatsNew ? <WhatsNewPopup onClose={hideWhatsNewPopup} /> : null}
-          {!showWhatsNew && showRecoveryPhraseReminder ? (
-            <RecoveryPhraseReminder
-              hasBackedUp={seedPhraseBackedUp}
-              onConfirm={this.onRecoveryPhraseReminderClose}
-            />
-          ) : null}
           {showTermsOfUse ? (
             <TermsOfUsePopup onAccept={this.onAcceptTermsOfUse} />
           ) : null}
