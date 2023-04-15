@@ -15,6 +15,8 @@ import ConnectedAccounts from '../connected-accounts';
 import { Tabs, Tab } from '../../components/ui/tabs';
 import { EthOverview } from '../../components/app/wallet-overview';
 import WhatsNewPopup from '../../components/app/whats-new-popup';
+import TermsOfUsePopup from '../../components/app/terms-of-use-popup';
+import RecoveryPhraseReminder from '../../components/app/recovery-phrase-reminder';
 import ActionableMessage from '../../components/ui/actionable-message/actionable-message';
 import {
   FONT_WEIGHT,
@@ -27,7 +29,8 @@ import {
   ICON_NAMES,
   ICON_SIZES,
 } from '../../components/component-library/icon/deprecated';
-import { ButtonIcon, Text } from '../../components/component-library';
+import { ButtonIcon } from '../../components/component-library/button-icon/deprecated';
+import { Text } from '../../components/component-library';
 
 import {
   ASSET_ROUTE,
@@ -91,12 +94,17 @@ export default class Home extends PureComponent {
     infuraBlocked: PropTypes.bool.isRequired,
     showWhatsNewPopup: PropTypes.bool.isRequired,
     hideWhatsNewPopup: PropTypes.func.isRequired,
+    showTermsOfUsePopup: PropTypes.bool.isRequired,
     announcementsToShow: PropTypes.bool.isRequired,
     ///: BEGIN:ONLY_INCLUDE_IN(flask)
     errorsToShow: PropTypes.object.isRequired,
     shouldShowErrors: PropTypes.bool.isRequired,
     removeSnapError: PropTypes.func.isRequired,
     ///: END:ONLY_INCLUDE_IN
+    showRecoveryPhraseReminder: PropTypes.bool.isRequired,
+    setRecoveryPhraseReminderHasBeenShown: PropTypes.func.isRequired,
+    setRecoveryPhraseReminderLastShown: PropTypes.func.isRequired,
+    setTermsOfUseLastAgreed: PropTypes.func.isRequired,
     showOutdatedBrowserWarning: PropTypes.bool.isRequired,
     setOutdatedBrowserWarningLastShown: PropTypes.func.isRequired,
     newNetworkAddedName: PropTypes.string,
@@ -200,6 +208,27 @@ export default class Home extends PureComponent {
       this.checkStatusAndNavigate();
     }
   }
+
+  onRecoveryPhraseReminderClose = () => {
+    const {
+      setRecoveryPhraseReminderHasBeenShown,
+      setRecoveryPhraseReminderLastShown,
+    } = this.props;
+    setRecoveryPhraseReminderHasBeenShown(true);
+    setRecoveryPhraseReminderLastShown(new Date().getTime());
+  };
+
+  onAcceptTermsOfUse = () => {
+    const { setTermsOfUseLastAgreed } = this.props;
+    setTermsOfUseLastAgreed(new Date().getTime());
+    this.context.trackEvent({
+      category: MetaMetricsEventCategory.Onboarding,
+      event: MetaMetricsEventName.TermsOfUseAccepted,
+      properties: {
+        location: 'Terms Of Use Popover',
+      },
+    });
+  };
 
   onOutdatedBrowserWarningClose = () => {
     const { setOutdatedBrowserWarningLastShown } = this.props;
@@ -539,6 +568,9 @@ export default class Home extends PureComponent {
       announcementsToShow,
       showWhatsNewPopup,
       hideWhatsNewPopup,
+      showTermsOfUsePopup,
+      seedPhraseBackedUp,
+      showRecoveryPhraseReminder,
       firstTimeFlowType,
       completedOnboarding,
       onboardedInThisUISession,
@@ -558,6 +590,10 @@ export default class Home extends PureComponent {
       showWhatsNewPopup &&
       !process.env.IN_TEST &&
       !newNetworkAddedConfigurationId;
+
+    const showTermsOfUse =
+      completedOnboarding && !onboardedInThisUISession && showTermsOfUsePopup;
+
     return (
       <div className="main-container">
         <Route path={CONNECTED_ROUTE} component={ConnectedSites} exact />
@@ -568,11 +604,20 @@ export default class Home extends PureComponent {
         />
         <div className="home__container">
           {showWhatsNew ? <WhatsNewPopup onClose={hideWhatsNewPopup} /> : null}
+          {!showWhatsNew && showRecoveryPhraseReminder ? (
+            <RecoveryPhraseReminder
+              hasBackedUp={seedPhraseBackedUp}
+              onConfirm={this.onRecoveryPhraseReminderClose}
+            />
+          ) : null}
+          {showTermsOfUse ? (
+            <TermsOfUsePopup onAccept={this.onAcceptTermsOfUse} />
+          ) : null}
           {isPopup && !connectedStatusPopoverHasBeenShown
             ? this.renderPopover()
             : null}
           <div className="home__main-view">
-            <MenuBar />
+            {process.env.MULTICHAIN ? null : <MenuBar />}
             <div className="home__balance-wrapper">
               <EthOverview />
             </div>

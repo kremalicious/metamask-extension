@@ -3122,6 +3122,12 @@ export function toggleAccountMenu() {
   };
 }
 
+export function toggleNetworkMenu() {
+  return {
+    type: actionConstants.TOGGLE_NETWORK_MENU,
+  };
+}
+
 export function setParticipateInMetaMetrics(
   participationPreference: boolean,
 ): ThunkAction<
@@ -3945,6 +3951,38 @@ export function setConnectedStatusPopoverHasBeenShown(): ThunkAction<
         throw new Error(err.message);
       }
     });
+  };
+}
+
+export function setRecoveryPhraseReminderHasBeenShown() {
+  return () => {
+    callBackgroundMethod('setRecoveryPhraseReminderHasBeenShown', [], (err) => {
+      if (isErrorWithMessage(err)) {
+        throw new Error(err.message);
+      }
+    });
+  };
+}
+
+export function setRecoveryPhraseReminderLastShown(
+  lastShown: number,
+): ThunkAction<void, MetaMaskReduxState, unknown, AnyAction> {
+  return () => {
+    callBackgroundMethod(
+      'setRecoveryPhraseReminderLastShown',
+      [lastShown],
+      (err) => {
+        if (isErrorWithMessage(err)) {
+          throw new Error(err.message);
+        }
+      },
+    );
+  };
+}
+
+export function setTermsOfUseLastAgreed(lastAgreed: number) {
+  return async () => {
+    await submitRequestToBackground('setTermsOfUseLastAgreed', [lastAgreed]);
   };
 }
 

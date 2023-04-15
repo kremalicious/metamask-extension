@@ -57,6 +57,7 @@ import {
 import { TEMPLATED_CONFIRMATION_MESSAGE_TYPES } from '../pages/confirmation/templates';
 import { STATIC_MAINNET_TOKEN_LIST } from '../../shared/constants/tokens';
 import { DAY } from '../../shared/constants/time';
+import { TERMS_OF_USE_LAST_UPDATED } from '../../shared/constants/terms';
 import {
   getNativeCurrency,
   getConversionRate,
@@ -483,22 +484,11 @@ export function getCurrentCurrency(state) {
 }
 
 export function getTotalUnapprovedCount(state) {
-  const {
-    unapprovedMsgCount = 0,
-    unapprovedPersonalMsgCount = 0,
-    unapprovedDecryptMsgCount = 0,
-    unapprovedEncryptionPublicKeyMsgCount = 0,
-    unapprovedTypedMessagesCount = 0,
-    pendingApprovalCount = 0,
-  } = state.metamask;
+  const { unapprovedDecryptMsgCount = 0, pendingApprovalCount = 0 } =
+    state.metamask;
 
   return (
-    unapprovedMsgCount +
-    unapprovedPersonalMsgCount +
     unapprovedDecryptMsgCount +
-    unapprovedEncryptionPublicKeyMsgCount +
-    unapprovedTypedMessagesCount +
-    getUnapprovedTxCount(state) +
     pendingApprovalCount +
     getSuggestedAssetCount(state)
   );
@@ -994,6 +984,30 @@ export function getSortedAnnouncementsToShow(state) {
   return announcementsSortedByDate;
 }
 
+export function getShowRecoveryPhraseReminder(state) {
+  const {
+    recoveryPhraseReminderLastShown,
+    recoveryPhraseReminderHasBeenShown,
+  } = state.metamask;
+
+  const currentTime = new Date().getTime();
+  const frequency = recoveryPhraseReminderHasBeenShown ? DAY * 90 : DAY * 2;
+
+  return currentTime - recoveryPhraseReminderLastShown >= frequency;
+}
+
+export function getShowTermsOfUse(state) {
+  const { termsOfUseLastAgreed } = state.metamask;
+
+  if (!termsOfUseLastAgreed) {
+    return true;
+  }
+  return (
+    new Date(termsOfUseLastAgreed).getTime() <
+    new Date(TERMS_OF_USE_LAST_UPDATED).getTime()
+  );
+}
+
 export function getShowOutdatedBrowserWarning(state) {
   const { outdatedBrowserWarningLastShown } = state.metamask;
   if (!outdatedBrowserWarningLastShown) {
@@ -1108,6 +1122,13 @@ export function getProvider(state) {
 
 export function getNetworkConfigurations(state) {
   return state.metamask.networkConfigurations;
+}
+
+export function getCurrentNetwork(state) {
+  const allNetworks = getAllNetworks(state);
+  const currentChainId = getCurrentChainId(state);
+
+  return allNetworks.find((network) => network.chainId === currentChainId);
 }
 
 export function getAllNetworks(state) {
