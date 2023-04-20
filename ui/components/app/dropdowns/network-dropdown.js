@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { pickBy } from 'lodash';
-import Button from '../../ui/button';
+import { Button } from '../../component-library/button';
 import * as actions from '../../../store/actions';
 import { openAlert as displayInvalidCustomNetworkAlert } from '../../../ducks/alerts/invalid-custom-network';
 import {
@@ -18,22 +18,17 @@ import {
 } from '../../../../shared/constants/network';
 import { isPrefixedFormattedHexString } from '../../../../shared/modules/network.utils';
 
-import ColorIndicator from '../../ui/color-indicator';
-import { IconColor, Size } from '../../../helpers/constants/design-system';
+import {
+  IconColor,
+  Color,
+  FontWeight,
+} from '../../../helpers/constants/design-system';
 import { getShowTestNetworks } from '../../../selectors';
 import { getEnvironmentType } from '../../../../app/scripts/lib/util';
 import { ENVIRONMENT_TYPE_POPUP } from '../../../../shared/constants/app';
-import {
-  MetaMetricsEventCategory,
-  MetaMetricsEventName,
-  MetaMetricsNetworkEventSource,
-} from '../../../../shared/constants/metametrics';
-import {
-  ADD_POPULAR_CUSTOM_NETWORK,
-  ADVANCED_ROUTE,
-} from '../../../helpers/constants/routes';
+import { MetaMetricsNetworkEventSource } from '../../../../shared/constants/metametrics';
+import { ADD_POPULAR_CUSTOM_NETWORK } from '../../../helpers/constants/routes';
 import { Icon, IconName } from '../../component-library';
-
 import { Dropdown, DropdownMenuItem } from './dropdown';
 
 // classes from nodes of the toggle element.
@@ -47,9 +42,8 @@ const notToggleElementClassnames = [
 ];
 
 const DROP_DOWN_MENU_ITEM_STYLE = {
-  fontSize: '16px',
-  lineHeight: '20px',
-  padding: '16px',
+  fontSize: '0.875rem', // h6 size from SCSS design system
+  padding: '12px',
 };
 
 function mapStateToProps(state) {
@@ -109,31 +103,14 @@ class NetworkDropdown extends Component {
     shouldShowTestNetworks: PropTypes.bool,
     networkDropdownOpen: PropTypes.bool.isRequired,
     displayInvalidCustomNetworkAlert: PropTypes.func.isRequired,
-    // showConfirmDeleteNetworkModal: PropTypes.func.isRequired,
-    showTestnetMessageInDropdown: PropTypes.bool.isRequired,
-    hideTestNetMessage: PropTypes.func.isRequired,
     history: PropTypes.object,
     dropdownStyles: PropTypes.object,
-    hideElementsForOnboarding: PropTypes.bool,
     onAddClick: PropTypes.func,
     upsertNetworkConfiguration: PropTypes.func.isRequired,
   };
 
   handleClick(newProviderType) {
-    const {
-      provider: { type: providerType },
-      setProviderType,
-    } = this.props;
-    const { trackEvent } = this.context;
-
-    trackEvent({
-      category: MetaMetricsEventCategory.Navigation,
-      event: MetaMetricsEventName.NavNetworkSwitched,
-      properties: {
-        from_network: providerType,
-        to_network: newProviderType,
-      },
-    });
+    const { setProviderType } = this.props;
     setProviderType(newProviderType);
   }
 
@@ -142,7 +119,9 @@ class NetworkDropdown extends Component {
     return (
       <div className="network__add-network-button">
         <Button
-          type="secondary"
+          type="link"
+          startIconName={IconName.Add}
+          color={Color.primaryDefault}
           onClick={() => {
             if (onAddClick) {
               onAddClick();
@@ -162,7 +141,7 @@ class NetworkDropdown extends Component {
     );
   }
 
-  renderCustomRpcList(networkConfigurations, provider, opts = {}) {
+  renderCustomRpcList(networkConfigurations, provider) {
     return Object.entries(networkConfigurations).map(
       ([networkConfigurationId, networkConfiguration]) => {
         const { rpcUrl, chainId, nickname = '' } = networkConfiguration;
@@ -179,29 +158,19 @@ class NetworkDropdown extends Component {
                 this.props.displayInvalidCustomNetworkAlert(nickname || rpcUrl);
               }
             }}
-            style={{
-              fontSize: '16px',
-              lineHeight: '20px',
-              padding: '16px',
-            }}
+            style={DROP_DOWN_MENU_ITEM_STYLE}
           >
             {isCurrentRpcTarget ? (
               <Icon name={IconName.Check} color={IconColor.successDefault} />
             ) : (
               <div className="network-check__transparent">✓</div>
             )}
-            <ColorIndicator
-              color={opts.isLocalHost ? 'localhost' : IconColor.iconMuted}
-              size={Size.LG}
-              type={ColorIndicator.TYPES.FILLED}
-            />
             <span
               className="network-name-item"
               data-testid={`${nickname}-network-item`}
               style={{
-                color: isCurrentRpcTarget
-                  ? 'var(--color-text-default)'
-                  : 'var(--color-text-alternative)',
+                fontWeight: isCurrentRpcTarget ? FontWeight.Bold : null,
+                marginLeft: '8px',
               }}
             >
               {nickname || rpcUrl}
@@ -249,19 +218,12 @@ class NetworkDropdown extends Component {
         ) : (
           <div className="network-check__transparent">✓</div>
         )}
-        <ColorIndicator
-          color={network}
-          size={Size.LG}
-          type={ColorIndicator.TYPES.FILLED}
-        />
         <span
           className="network-name-item"
           data-testid={`${network}-network-item`}
           style={{
-            color:
-              providerType === network
-                ? 'var(--color-text-default)'
-                : 'var(--color-text-alternative)',
+            fontWeight: providerType === network ? FontWeight.Bold : null,
+            marginLeft: '8px',
           }}
         >
           {this.context.t(network)}
@@ -318,19 +280,12 @@ class NetworkDropdown extends Component {
         ) : (
           <div className="network-check__transparent">✓</div>
         )}
-        <ColorIndicator
-          color={network}
-          size={Size.LG}
-          type={ColorIndicator.TYPES.FILLED}
-        />
         <span
           className="network-name-item"
           data-testid={`${network}-network-item`}
           style={{
-            color:
-              provider.type === network
-                ? 'var(--color-text-default)'
-                : 'var(--color-text-alternative)',
+            fontWeight: provider.type === network ? FontWeight.Bold : null,
+            marginLeft: '8px',
           }}
         >
           {this.context.t(network)}
@@ -341,12 +296,8 @@ class NetworkDropdown extends Component {
 
   render() {
     const {
-      history,
-      hideElementsForOnboarding,
       hideNetworkDropdown,
       shouldShowTestNetworks,
-      showTestnetMessageInDropdown,
-      hideTestNetMessage,
       networkConfigurations,
     } = this.props;
 
@@ -362,7 +313,6 @@ class NetworkDropdown extends Component {
     );
 
     const isOpen = this.props.networkDropdownOpen;
-    const { t } = this.context;
 
     return (
       <Dropdown
@@ -384,47 +334,12 @@ class NetworkDropdown extends Component {
           this.props.dropdownStyles || {
             position: 'absolute',
             top: '58px',
-            width: '309px',
+            width: '250px',
             zIndex: '55',
           }
         }
-        innerStyle={{
-          padding: '16px 0',
-        }}
+        innerStyle={{ padding: '0 0 16px 0' }}
       >
-        <div className="network-dropdown-header">
-          {hideElementsForOnboarding ? null : (
-            <div className="network-dropdown-title">{t('networks')}</div>
-          )}
-          {hideElementsForOnboarding ? null : (
-            <div className="network-dropdown-divider" />
-          )}
-          {showTestnetMessageInDropdown && !hideElementsForOnboarding ? (
-            <div className="network-dropdown-content">
-              {t('toggleTestNetworks', [
-                <a
-                  href="#"
-                  key="advancedSettingsLink"
-                  className="network-dropdown-content--link"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    hideNetworkDropdown();
-                    history.push(`${ADVANCED_ROUTE}#show-testnets`);
-                  }}
-                >
-                  {t('showHide')}
-                </a>,
-              ])}
-              <Button
-                onClick={hideTestNetMessage}
-                className="network-dropdown-content--dismiss"
-              >
-                {t('dismiss')}
-              </Button>
-            </div>
-          ) : null}
-        </div>
-
         <div className="network-dropdown-list">
           {this.renderNetworkEntry(NETWORK_TYPES.MAINNET)}
 

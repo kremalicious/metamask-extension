@@ -6,7 +6,6 @@
   border-radius: 4px;
   background: var(--color-background-default);
   box-shadow: var(--shadow-size-sm) var(--color-shadow-default);
-  min-width: 150px;
   color: var(--color-text-default);
 
   @include screen-sm-max {
@@ -26,7 +25,7 @@
   }
 
   &__item {
-    padding: 18px;
+    padding: 8px 16px;
     display: flex;
     flex-flow: row wrap;
     align-items: center;
@@ -35,11 +34,6 @@
     border: 0;
     background: none;
     width: 100%;
-
-    @include screen-sm-max {
-      padding: 0 14px;
-      height: 40px;
-    }
 
     &--clickable {
       cursor: pointer;
@@ -184,18 +178,17 @@
   &__no-accounts {
     @include H6;
 
-    padding: 16px 14px;
+    padding: 16px;
   }
 
   &__account {
     display: flex;
     flex-flow: row nowrap;
-    padding: 14px;
+    padding: 8px 16px;
     flex: 0 0 auto;
     background: none;
     border: 0;
     width: 100%;
-    border-bottom: 1px solid var(--color-border-muted);
 
     .remove-account-icon {
       width: 15px;
@@ -233,7 +226,7 @@
   }
 
   &__name {
-    @include Paragraph;
+    @include H6;
 
     color: var(--color-text-default);
     text-overflow: ellipsis;
@@ -246,35 +239,14 @@
   &__balance {
     @include H6;
 
+    font-weight: 400;
     color: var(--color-text-alternative);
   }
 
   &__action {
-    @include Paragraph;
+    @include H6;
 
     cursor: pointer;
-  }
-
-  &__scroll-button {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    height: 28px;
-    width: 28px;
-    border-radius: 14px;
-    border: 1px solid var(--color-border-default);
-    background: var(--color-background-alternative);
-    color: var(--color-icon-default);
-    z-index: 201;
-    cursor: pointer;
-    opacity: 0.8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &:hover {
-      opacity: 1;
-    }
   }
 
   &__icon-list {

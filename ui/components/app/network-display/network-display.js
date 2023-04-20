@@ -8,12 +8,10 @@ import {
 } from '../../../../shared/constants/network';
 
 import LoadingIndicator from '../../ui/loading-indicator';
-import ColorIndicator from '../../ui/color-indicator';
 import {
   BorderColor,
-  IconColor,
-  Size,
-  TypographyVariant,
+  FontWeight,
+  Color,
 } from '../../../helpers/constants/design-system';
 import Chip from '../../ui/chip/chip';
 import { useI18nContext } from '../../../hooks/useI18nContext';
@@ -21,7 +19,6 @@ import { isNetworkLoading } from '../../../selectors';
 import { Icon, IconName, IconSize } from '../../component-library';
 
 export default function NetworkDisplay({
-  indicatorSize,
   disabled,
   labelProps,
   targetNetwork,
@@ -39,31 +36,14 @@ export default function NetworkDisplay({
   return (
     <Chip
       dataTestId="network-display"
-      borderColor={
-        onClick ? BorderColor.borderDefault : BorderColor.borderMuted
-      }
+      borderColor={BorderColor.transparent}
       onClick={onClick}
       leftIcon={
         <LoadingIndicator
           alt={t('attemptingConnect')}
           title={t('attemptingConnect')}
           isLoading={networkIsLoading}
-        >
-          <ColorIndicator
-            color={
-              networkType === NETWORK_TYPES.RPC
-                ? IconColor.iconMuted
-                : networkType
-            }
-            size={indicatorSize}
-            type={ColorIndicator.TYPES.FILLED}
-            iconClassName={
-              networkType === NETWORK_TYPES.RPC && indicatorSize !== Size.XS
-                ? 'fa fa-question'
-                : undefined
-            }
-          />
-        </LoadingIndicator>
+        />
       }
       rightIcon={
         onClick ? <Icon name={IconName.ArrowDown} size={IconSize.Xs} /> : null
@@ -78,17 +58,14 @@ export default function NetworkDisplay({
         'network-display--clickable': typeof onClick === 'function',
       })}
       labelProps={{
-        variant: TypographyVariant.H7,
+        fontWeight: FontWeight.Medium,
+        color: Color.textDefault,
         ...labelProps,
       }}
     />
   );
 }
 NetworkDisplay.propTypes = {
-  /**
-   * The size of the indicator
-   */
-  indicatorSize: PropTypes.oneOf(Object.values(Size)),
   /**
    * The label props of the label can use most of the Typography props
    */
@@ -114,8 +91,4 @@ NetworkDisplay.propTypes = {
    * of the NetworkDisplay
    */
   onClick: PropTypes.func,
-};
-
-NetworkDisplay.defaultProps = {
-  indicatorSize: Size.LG,
 };

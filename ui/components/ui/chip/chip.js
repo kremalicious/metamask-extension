@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { omit } from 'lodash';
-import Typography from '../typography';
+import { Text } from '../../component-library/text';
 import UrlIcon from '../url-icon';
 import {
   BackgroundColor,
@@ -57,15 +57,14 @@ export default function Chip({
         <UrlIcon className="chip__left-url-icon" url={leftIconUrl} />
       ) : null}
       {children ?? (
-        <Typography
+        <Text
           className="chip__label"
-          variant={TypographyVariant.H6}
           as="span"
           color={TextColor.textAlternative}
           {...labelProps}
         >
           {label}
-        </Typography>
+        </Text>
       )}
       {rightIcon ? <div className="chip__right-icon">{rightIcon}</div> : null}
     </div>

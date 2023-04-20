@@ -1,41 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { debounce } from 'lodash';
 import Fuse from 'fuse.js';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import classnames from 'classnames';
 import { ENVIRONMENT_TYPE_POPUP } from '../../../../shared/constants/app';
-import {
-  MetaMetricsContextProp,
-  MetaMetricsEventAccountType,
-  MetaMetricsEventCategory,
-  MetaMetricsEventName,
-} from '../../../../shared/constants/metametrics';
 import { getEnvironmentType } from '../../../../app/scripts/lib/util';
 import Identicon from '../../ui/identicon';
 import SiteIcon from '../../ui/site-icon';
 import UserPreferencedCurrencyDisplay from '../user-preferenced-currency-display';
-import {
-  PRIMARY,
-  ///: BEGIN:ONLY_INCLUDE_IN(beta,flask)
-  SUPPORT_REQUEST_LINK,
-  ///: END:ONLY_INCLUDE_IN
-} from '../../../helpers/constants/common';
+import { PRIMARY } from '../../../helpers/constants/common';
 import {
   SETTINGS_ROUTE,
   NEW_ACCOUNT_ROUTE,
   IMPORT_ACCOUNT_ROUTE,
   CONNECT_HARDWARE_ROUTE,
-  DEFAULT_ROUTE,
   ///: BEGIN:ONLY_INCLUDE_IN(flask)
   NOTIFICATIONS_ROUTE,
   ///: END:ONLY_INCLUDE_IN
 } from '../../../helpers/constants/routes';
 import TextField from '../../ui/text-field';
 
-import Button from '../../ui/button';
 import SearchIcon from '../../ui/icon/search-icon';
-import { SUPPORT_LINK } from '../../../../shared/lib/ui-utils';
 import { IconColor } from '../../../helpers/constants/design-system';
 import { Icon, IconName, IconSize } from '../../component-library';
 import KeyRingLabel from './keyring-label';
@@ -82,7 +67,6 @@ export default class AccountMenu extends Component {
     history: PropTypes.object,
     isAccountMenuOpen: PropTypes.bool,
     keyrings: PropTypes.array,
-    lockMetamask: PropTypes.func,
     selectedAddress: PropTypes.string,
     setSelectedAccount: PropTypes.func,
     toggleAccountMenu: PropTypes.func,
@@ -96,7 +80,6 @@ export default class AccountMenu extends Component {
   accountsRef;
 
   state = {
-    shouldShowScrollButton: false,
     searchQuery: '',
   };
 
@@ -113,21 +96,12 @@ export default class AccountMenu extends Component {
     ],
   });
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const { isAccountMenuOpen: prevIsAccountMenuOpen } = prevProps;
-    const { searchQuery: prevSearchQuery } = prevState;
     const { isAccountMenuOpen } = this.props;
-    const { searchQuery } = this.state;
 
     if (!prevIsAccountMenuOpen && isAccountMenuOpen) {
-      this.setShouldShowScrollButton();
       this.resetSearchQuery();
-    }
-
-    // recalculate on each search query change
-    // whether we can show scroll down button
-    if (isAccountMenuOpen && prevSearchQuery !== searchQuery) {
-      this.setShouldShowScrollButton();
     }
   }
 
@@ -208,16 +182,7 @@ export default class AccountMenu extends Component {
       return (
         <button
           className="account-menu__account account-menu__item--clickable"
-          onClick={() => {
-            this.context.trackEvent({
-              category: MetaMetricsEventCategory.Navigation,
-              event: MetaMetricsEventName.NavAccountSwitched,
-              properties: {
-                location: 'Main Menu',
-              },
-            });
-            setSelectedAccount(identity.address);
-          }}
+          onClick={() => setSelectedAccount(identity.address)}
           key={identity.address}
           data-testid="account-menu__account"
         >
@@ -263,52 +228,12 @@ export default class AccountMenu extends Component {
     this.setState({ searchQuery });
   }
 
-  setShouldShowScrollButton = () => {
-    if (!this.accountsRef) {
-      return;
-    }
-
-    const { scrollTop, offsetHeight, scrollHeight } = this.accountsRef;
-    const canScroll = scrollHeight > offsetHeight;
-    const atAccountListBottom = scrollTop + offsetHeight >= scrollHeight;
-    const shouldShowScrollButton = canScroll && !atAccountListBottom;
-
-    this.setState({ shouldShowScrollButton });
-  };
-
-  onScroll = debounce(this.setShouldShowScrollButton, 25);
-
-  handleScrollDown = (e) => {
-    e.stopPropagation();
-
-    const { scrollHeight } = this.accountsRef;
-    this.accountsRef.scroll({ left: 0, top: scrollHeight, behavior: 'smooth' });
-
-    this.setShouldShowScrollButton();
-  };
-
-  renderScrollButton() {
-    if (!this.state.shouldShowScrollButton) {
-      return null;
-    }
-
-    return (
-      <div
-        className="account-menu__scroll-button"
-        onClick={this.handleScrollDown}
-      >
-        <i className="fa fa-arrow-down" title={this.context.t('scrollDown')} />
-      </div>
-    );
-  }
-
   render() {
-    const { t, trackEvent } = this.context;
+    const { t } = this.context;
     const {
       shouldShowAccountsSearch,
       isAccountMenuOpen,
       toggleAccountMenu,
-      lockMetamask,
       history,
       ///: BEGIN:ONLY_INCLUDE_IN(flask)
       unreadNotificationsCount,
@@ -319,55 +244,24 @@ export default class AccountMenu extends Component {
       return null;
     }
 
-    let supportText = t('support');
-    let supportLink = SUPPORT_LINK;
-    ///: BEGIN:ONLY_INCLUDE_IN(beta,flask)
-    supportText = t('needHelpSubmitTicket');
-    supportLink = SUPPORT_REQUEST_LINK;
-    ///: END:ONLY_INCLUDE_IN
-
     return (
       <div className="account-menu">
         <div className="account-menu__close-area" onClick={toggleAccountMenu} />
-        <AccountMenuItem className="account-menu__header">
-          {t('myAccounts')}
-          <Button
-            className="account-menu__lock-button"
-            type="secondary"
-            onClick={() => {
-              lockMetamask();
-              history.push(DEFAULT_ROUTE);
-            }}
-          >
-            {t('lock')}
-          </Button>
-        </AccountMenuItem>
-        <div className="account-menu__divider" />
         <div className="account-menu__accounts-container">
           {shouldShowAccountsSearch ? this.renderAccountsSearch() : null}
           <div
             className="account-menu__accounts"
-            onScroll={this.onScroll}
             ref={(ref) => {
               this.accountsRef = ref;
             }}
           >
             {this.renderAccounts()}
           </div>
-          {this.renderScrollButton()}
         </div>
         <div className="account-menu__divider" />
         <AccountMenuItem
           onClick={() => {
             toggleAccountMenu();
-            trackEvent({
-              category: MetaMetricsEventCategory.Navigation,
-              event: MetaMetricsEventName.AccountAddSelected,
-              properties: {
-                account_type: MetaMetricsEventAccountType.Default,
-                location: 'Main Menu',
-              },
-            });
             history.push(NEW_ACCOUNT_ROUTE);
           }}
           icon={<Icon name={IconName.Add} color={IconColor.iconAlternative} />}
@@ -376,14 +270,6 @@ export default class AccountMenu extends Component {
         <AccountMenuItem
           onClick={() => {
             toggleAccountMenu();
-            trackEvent({
-              category: MetaMetricsEventCategory.Navigation,
-              event: MetaMetricsEventName.AccountAddSelected,
-              properties: {
-                account_type: MetaMetricsEventAccountType.Imported,
-                location: 'Main Menu',
-              },
-            });
             history.push(IMPORT_ACCOUNT_ROUTE);
           }}
           icon={
@@ -394,14 +280,6 @@ export default class AccountMenu extends Component {
         <AccountMenuItem
           onClick={() => {
             toggleAccountMenu();
-            trackEvent({
-              category: MetaMetricsEventCategory.Navigation,
-              event: MetaMetricsEventName.AccountAddSelected,
-              properties: {
-                account_type: MetaMetricsEventAccountType.Hardware,
-                location: 'Main Menu',
-              },
-            });
             if (getEnvironmentType() === ENVIRONMENT_TYPE_POPUP) {
               global.platform.openExtensionInBrowser(CONNECT_HARDWARE_ROUTE);
             } else {
@@ -413,66 +291,32 @@ export default class AccountMenu extends Component {
           }
           text={t('connectHardwareWallet')}
         />
-        <div className="account-menu__divider" />
         {
           ///: BEGIN:ONLY_INCLUDE_IN(flask)
-          <>
-            <AccountMenuItem
-              onClick={() => {
-                toggleAccountMenu();
-                history.push(NOTIFICATIONS_ROUTE);
-              }}
-              icon={
-                <div className="account-menu__notifications">
-                  <Icon name={IconName.Notification} size={IconSize.Lg} />
-                  {unreadNotificationsCount > 0 && (
-                    <div className="account-menu__notifications__count">
-                      {unreadNotificationsCount}
-                    </div>
-                  )}
-                </div>
-              }
-              text={t('notifications')}
-            />
-            <div className="account-menu__divider" />
-          </>
+          <AccountMenuItem
+            onClick={() => {
+              toggleAccountMenu();
+              history.push(NOTIFICATIONS_ROUTE);
+            }}
+            icon={
+              <div className="account-menu__notifications">
+                <Icon name={IconName.Notification} size={IconSize.Lg} />
+                {unreadNotificationsCount > 0 && (
+                  <div className="account-menu__notifications__count">
+                    {unreadNotificationsCount}
+                  </div>
+                )}
+              </div>
+            }
+            text={t('notifications')}
+          />
           ///: END:ONLY_INCLUDE_IN
         }
-        <AccountMenuItem
-          onClick={() => {
-            trackEvent(
-              {
-                category: MetaMetricsEventCategory.Navigation,
-                event: MetaMetricsEventName.SupportLinkClicked,
-                properties: {
-                  url: supportLink,
-                },
-              },
-              {
-                contextPropsIntoEventProperties: [
-                  MetaMetricsContextProp.PageTitle,
-                ],
-              },
-            );
-            global.platform.openTab({ url: supportLink });
-          }}
-          icon={
-            <Icon name={IconName.Messages} color={IconColor.iconAlternative} />
-          }
-          text={supportText}
-        />
 
         <AccountMenuItem
           onClick={() => {
             toggleAccountMenu();
             history.push(SETTINGS_ROUTE);
-            this.context.trackEvent({
-              category: MetaMetricsEventCategory.Navigation,
-              event: MetaMetricsEventName.NavSettingsOpened,
-              properties: {
-                location: 'Main Menu',
-              },
-            });
           }}
           icon={
             <Icon

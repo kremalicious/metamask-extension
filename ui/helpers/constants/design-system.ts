@@ -331,15 +331,15 @@ export const TEXT_TRANSFORM = {
 };
 
 export enum FontWeight {
-  Bold = 'bold',
-  Medium = 'medium',
-  Normal = 'normal',
+  Bold = '600',
+  Medium = '500',
+  Normal = '400',
 }
 
 export const FONT_WEIGHT = {
-  BOLD: 'bold',
-  MEDIUM: 'medium',
-  NORMAL: 'normal',
+  BOLD: '600',
+  MEDIUM: '500',
+  NORMAL: '400',
 };
 
 export enum OverflowWrap {
