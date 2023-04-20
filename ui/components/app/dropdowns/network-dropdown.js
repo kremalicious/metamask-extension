@@ -32,7 +32,7 @@ import {
   ADD_POPULAR_CUSTOM_NETWORK,
   ADVANCED_ROUTE,
 } from '../../../helpers/constants/routes';
-import { Icon, ICON_NAMES } from '../../component-library/icon/deprecated';
+import { Icon, IconName } from '../../component-library';
 
 import { Dropdown, DropdownMenuItem } from './dropdown';
 
@@ -186,7 +186,7 @@ class NetworkDropdown extends Component {
             }}
           >
             {isCurrentRpcTarget ? (
-              <Icon name={ICON_NAMES.CHECK} color={IconColor.successDefault} />
+              <Icon name={IconName.Check} color={IconColor.successDefault} />
             ) : (
               <div className="network-check__transparent">✓</div>
             )}
@@ -245,7 +245,7 @@ class NetworkDropdown extends Component {
         style={DROP_DOWN_MENU_ITEM_STYLE}
       >
         {providerType === network ? (
-          <Icon name={ICON_NAMES.CHECK} color={IconColor.successDefault} />
+          <Icon name={IconName.Check} color={IconColor.successDefault} />
         ) : (
           <div className="network-check__transparent">✓</div>
         )}
@@ -314,7 +314,7 @@ class NetworkDropdown extends Component {
         style={DROP_DOWN_MENU_ITEM_STYLE}
       >
         {isCurrentRpcTarget ? (
-          <Icon name={ICON_NAMES.CHECK} color={IconColor.successDefault} />
+          <Icon name={IconName.Check} color={IconColor.successDefault} />
         ) : (
           <div className="network-check__transparent">✓</div>
         )}
