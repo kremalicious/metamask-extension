@@ -20,12 +20,6 @@
     flex: 0 0 auto;
   }
 
-  // TODO: fix style import order so this isn't required to override specificity of `tab` class
-  &__main-view &__tabs {
-    border: none;
-    padding: 0 16px;
-  }
-
   &__main-view &__tab {
     @include H6;
 

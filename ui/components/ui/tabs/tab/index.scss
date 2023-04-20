@@ -1,4 +1,7 @@
 .tab {
+  // so the active tab line is sitting right on top of tabs border, not underneath it
+  margin-bottom: -1px;
+
   button {
     min-width: 50px;
     background-color: unset;
