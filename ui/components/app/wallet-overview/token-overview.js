@@ -44,11 +44,14 @@ const TokenOverview = ({ className, token }) => {
     <WalletOverview
       balance={
         <div className="token-overview__balance">
-          <CurrencyDisplay
-            className="token-overview__primary-balance"
-            displayValue={balanceToRender}
-            suffix={token.symbol}
-          />
+          <div className="token-overview__primary-container">
+            <CurrencyDisplay
+              style={{ display: 'contents' }}
+              className="token-overview__primary-balance"
+              displayValue={balanceToRender}
+              suffix={token.symbol}
+            />
+          </div>
           {formattedFiatBalance ? (
             <CurrencyDisplay
               className="token-overview__secondary-balance"
