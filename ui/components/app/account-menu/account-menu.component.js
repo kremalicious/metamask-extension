@@ -14,7 +14,7 @@ import {
   NEW_ACCOUNT_ROUTE,
   IMPORT_ACCOUNT_ROUTE,
   CONNECT_HARDWARE_ROUTE,
-  ///: BEGIN:ONLY_INCLUDE_IN(flask)
+  ///: BEGIN:ONLY_INCLUDE_IN(snaps)
   NOTIFICATIONS_ROUTE,
   ///: END:ONLY_INCLUDE_IN
 } from '../../../helpers/constants/routes';
@@ -72,7 +72,7 @@ export default class AccountMenu extends Component {
     toggleAccountMenu: PropTypes.func,
     addressConnectedSubjectMap: PropTypes.object,
     originOfCurrentTab: PropTypes.string,
-    ///: BEGIN:ONLY_INCLUDE_IN(flask)
+    ///: BEGIN:ONLY_INCLUDE_IN(snaps)
     unreadNotificationsCount: PropTypes.number,
     ///: END:ONLY_INCLUDE_IN
   };
@@ -235,7 +235,7 @@ export default class AccountMenu extends Component {
       isAccountMenuOpen,
       toggleAccountMenu,
       history,
-      ///: BEGIN:ONLY_INCLUDE_IN(flask)
+      ///: BEGIN:ONLY_INCLUDE_IN(snaps)
       unreadNotificationsCount,
       ///: END:ONLY_INCLUDE_IN
     } = this.props;
@@ -292,7 +292,7 @@ export default class AccountMenu extends Component {
           text={t('connectHardwareWallet')}
         />
         {
-          ///: BEGIN:ONLY_INCLUDE_IN(flask)
+          ///: BEGIN:ONLY_INCLUDE_IN(snaps)
           <AccountMenuItem
             onClick={() => {
               toggleAccountMenu();

@@ -25,11 +25,11 @@ import {
 } from '../../helpers/constants/design-system';
 import { SECOND } from '../../../shared/constants/time';
 import {
-  ICON_NAMES,
-  ICON_SIZES,
-} from '../../components/component-library/icon/deprecated';
-import { ButtonIcon } from '../../components/component-library/button-icon/deprecated';
-import { Text } from '../../components/component-library';
+  ButtonIcon,
+  ButtonIconSize,
+  IconName,
+  Text,
+} from '../../components/component-library';
 
 import {
   ASSET_ROUTE,
@@ -68,7 +68,7 @@ export default class Home extends PureComponent {
   static propTypes = {
     history: PropTypes.object,
     forgottenPassword: PropTypes.bool,
-    suggestedAssets: PropTypes.array,
+    hasWatchAssetPendingApprovals: PropTypes.bool,
     unconfirmedTransactionsCount: PropTypes.number,
     isPopup: PropTypes.bool,
     isNotification: PropTypes.bool.isRequired,
@@ -95,7 +95,7 @@ export default class Home extends PureComponent {
     hideWhatsNewPopup: PropTypes.func.isRequired,
     showTermsOfUsePopup: PropTypes.bool.isRequired,
     announcementsToShow: PropTypes.bool.isRequired,
-    ///: BEGIN:ONLY_INCLUDE_IN(flask)
+    ///: BEGIN:ONLY_INCLUDE_IN(snaps)
     errorsToShow: PropTypes.object.isRequired,
     shouldShowErrors: PropTypes.bool.isRequired,
     removeSnapError: PropTypes.func.isRequired,
@@ -135,7 +135,7 @@ export default class Home extends PureComponent {
       haveSwapsQuotes,
       isNotification,
       showAwaitingSwapScreen,
-      suggestedAssets = [],
+      hasWatchAssetPendingApprovals,
       swapsFetchParams,
       unconfirmedTransactionsCount,
     } = this.props;
@@ -146,7 +146,7 @@ export default class Home extends PureComponent {
     } else if (
       firstPermissionsRequestId ||
       unconfirmedTransactionsCount > 0 ||
-      suggestedAssets.length > 0 ||
+      hasWatchAssetPendingApprovals ||
       (!isNotification &&
         (showAwaitingSwapScreen || haveSwapsQuotes || swapsFetchParams))
     ) {
@@ -159,7 +159,7 @@ export default class Home extends PureComponent {
       firstPermissionsRequestId,
       history,
       isNotification,
-      suggestedAssets = [],
+      hasWatchAssetPendingApprovals,
       unconfirmedTransactionsCount,
       haveSwapsQuotes,
       showAwaitingSwapScreen,
@@ -176,7 +176,7 @@ export default class Home extends PureComponent {
       history.push(`${CONNECT_ROUTE}/${firstPermissionsRequestId}`);
     } else if (unconfirmedTransactionsCount > 0) {
       history.push(CONFIRM_TRANSACTION_ROUTE);
-    } else if (suggestedAssets.length > 0) {
+    } else if (hasWatchAssetPendingApprovals) {
       history.push(CONFIRM_ADD_SUGGESTED_TOKEN_ROUTE);
     } else if (pendingConfirmations.length > 0) {
       history.push(CONFIRMATION_V_NEXT_ROUTE);
@@ -223,7 +223,7 @@ export default class Home extends PureComponent {
       setWeb3ShimUsageAlertDismissed,
       originOfCurrentTab,
       disableWeb3ShimUsageAlert,
-      ///: BEGIN:ONLY_INCLUDE_IN(flask)
+      ///: BEGIN:ONLY_INCLUDE_IN(snaps)
       removeSnapError,
       errorsToShow,
       shouldShowErrors,
@@ -252,7 +252,7 @@ export default class Home extends PureComponent {
     return (
       <MultipleNotifications>
         {
-          ///: BEGIN:ONLY_INCLUDE_IN(flask)
+          ///: BEGIN:ONLY_INCLUDE_IN(snaps)
           shouldShowErrors
             ? Object.entries(errorsToShow).map(([errorId, error]) => {
                 return (
@@ -301,8 +301,8 @@ export default class Home extends PureComponent {
                   {t('newNftAddedMessage')}
                 </Text>
                 <ButtonIcon
-                  iconName={ICON_NAMES.CLOSE}
-                  size={ICON_SIZES.SM}
+                  iconName={IconName.Close}
+                  size={ButtonIconSize.Sm}
                   ariaLabel={t('close')}
                   onClick={onAutoHide}
                 />
@@ -324,8 +324,8 @@ export default class Home extends PureComponent {
                   {t('removeNftMessage')}
                 </Text>
                 <ButtonIcon
-                  iconName={ICON_NAMES.CLOSE}
-                  size={ICON_SIZES.SM}
+                  iconName={IconName.Close}
+                  size={ButtonIconSize.Sm}
                   ariaLabel={t('close')}
                   onClick={onAutoHide}
                 />
@@ -344,8 +344,8 @@ export default class Home extends PureComponent {
                   {t('newNetworkAdded', [newNetworkAddedName])}
                 </Text>
                 <ButtonIcon
-                  iconName={ICON_NAMES.CLOSE}
-                  size={ICON_SIZES.SM}
+                  iconName={IconName.Close}
+                  size={ButtonIconSize.Sm}
                   ariaLabel={t('close')}
                   onClick={() => clearNewNetworkAdded()}
                   className="home__new-network-notification-close"
@@ -379,8 +379,8 @@ export default class Home extends PureComponent {
                 </Box>
 
                 <ButtonIcon
-                  iconName={ICON_NAMES.CLOSE}
-                  size={ICON_SIZES.SM}
+                  iconName={IconName.Close}
+                  size={ButtonIconSize.Sm}
                   ariaLabel={t('close')}
                   onClick={() => setNewTokensImported('')}
                   className="home__new-tokens-imported-notification-close"
