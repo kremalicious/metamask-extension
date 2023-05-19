@@ -7,6 +7,7 @@ import { pickBy } from 'lodash';
 import { Button } from '../../component-library/button';
 import * as actions from '../../../store/actions';
 import { openAlert as displayInvalidCustomNetworkAlert } from '../../../ducks/alerts/invalid-custom-network';
+import { getProviderConfig } from '../../../ducks/metamask/metamask';
 import {
   BUILT_IN_NETWORKS,
   CHAIN_ID_TO_RPC_URL_MAP,
@@ -48,7 +49,7 @@ const DROP_DOWN_MENU_ITEM_STYLE = {
 
 function mapStateToProps(state) {
   return {
-    provider: state.metamask.provider,
+    providerConfig: getProviderConfig(state),
     shouldShowTestNetworks: getShowTestNetworks(state),
     networkConfigurations: state.metamask.networkConfigurations,
     networkDropdownOpen: state.appState.networkDropdownOpen,
@@ -90,7 +91,7 @@ class NetworkDropdown extends Component {
   };
 
   static propTypes = {
-    provider: PropTypes.shape({
+    providerConfig: PropTypes.shape({
       nickname: PropTypes.string,
       rpcUrl: PropTypes.string,
       type: PropTypes.string,
@@ -141,12 +142,13 @@ class NetworkDropdown extends Component {
     );
   }
 
-  renderCustomRpcList(networkConfigurations, provider) {
+  renderCustomRpcList(networkConfigurations, providerConfig) {
     return Object.entries(networkConfigurations).map(
       ([networkConfigurationId, networkConfiguration]) => {
         const { rpcUrl, chainId, nickname = '' } = networkConfiguration;
         const isCurrentRpcTarget =
-          provider.type === NETWORK_TYPES.RPC && rpcUrl === provider.rpcUrl;
+          providerConfig.type === NETWORK_TYPES.RPC &&
+          rpcUrl === providerConfig.rpcUrl;
         return (
           <DropdownMenuItem
             key={`common${rpcUrl}`}
@@ -181,30 +183,9 @@ class NetworkDropdown extends Component {
     );
   }
 
-  getNetworkName() {
-    const { provider } = this.props;
-    const providerName = provider.type;
-    const { t } = this.context;
-
-    switch (providerName) {
-      case NETWORK_TYPES.MAINNET:
-        return t('mainnet');
-      case NETWORK_TYPES.GOERLI:
-        return t('goerli');
-      case NETWORK_TYPES.SEPOLIA:
-        return t('sepolia');
-      case NETWORK_TYPES.LINEA_TESTNET:
-        return t('lineatestnet');
-      case NETWORK_TYPES.LOCALHOST:
-        return t('localhost');
-      default:
-        return provider.nickname || t('unknownNetwork');
-    }
-  }
-
   renderNetworkEntry(network) {
     const {
-      provider: { type: providerType },
+      providerConfig: { type: providerType },
     } = this.props;
     return (
       <DropdownMenuItem
@@ -233,7 +214,7 @@ class NetworkDropdown extends Component {
   }
 
   renderNonInfuraDefaultNetwork(networkConfigurations, network) {
-    const { provider, setActiveNetwork, upsertNetworkConfiguration } =
+    const { providerConfig, setActiveNetwork, upsertNetworkConfiguration } =
       this.props;
 
     const { chainId, ticker, blockExplorerUrl } = BUILT_IN_NETWORKS[network];
@@ -241,7 +222,8 @@ class NetworkDropdown extends Component {
     const rpcUrl = CHAIN_ID_TO_RPC_URL_MAP[chainId];
 
     const isCurrentRpcTarget =
-      provider.type === NETWORK_TYPES.RPC && rpcUrl === provider.rpcUrl;
+      providerConfig.type === NETWORK_TYPES.RPC &&
+      rpcUrl === providerConfig.rpcUrl;
     return (
       <DropdownMenuItem
         key={network}
@@ -284,7 +266,8 @@ class NetworkDropdown extends Component {
           className="network-name-item"
           data-testid={`${network}-network-item`}
           style={{
-            fontWeight: provider.type === network ? FontWeight.Bold : null,
+            fontWeight:
+              providerConfig.type === network ? FontWeight.Bold : null,
             marginLeft: '8px',
           }}
         >
@@ -345,7 +328,7 @@ class NetworkDropdown extends Component {
 
           {this.renderCustomRpcList(
             rpcListDetailWithoutLocalHostAndLinea,
-            this.props.provider,
+            this.props.providerConfig,
           )}
 
           {shouldShowTestNetworks && (
@@ -362,7 +345,7 @@ class NetworkDropdown extends Component {
               )}
               {this.renderCustomRpcList(
                 rpcListDetailForLocalHost,
-                this.props.provider,
+                this.props.providerConfig,
                 { isLocalHost: true },
               )}
             </>

@@ -34,16 +34,19 @@ class SelectedAccount extends Component {
   render() {
     const { t } = this.context;
     const { selectedIdentity } = this.props;
+
     const checksummedAddress = toChecksumHexAddress(selectedIdentity.address);
+
+    const title = this.state.copied
+      ? t('copiedExclamation')
+      : t('copyToClipboard');
 
     return (
       <div className="selected-account">
         <Tooltip
           wrapperClassName="selected-account__tooltip-wrapper"
           position="bottom"
-          title={
-            this.state.copied ? t('copiedExclamation') : t('copyToClipboard')
-          }
+          title={title}
         >
           <button
             className="selected-account__clickable"

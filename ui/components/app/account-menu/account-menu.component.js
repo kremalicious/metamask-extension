@@ -17,12 +17,22 @@ import {
   ///: BEGIN:ONLY_INCLUDE_IN(snaps)
   NOTIFICATIONS_ROUTE,
   ///: END:ONLY_INCLUDE_IN
+  ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+  CUSTODY_ACCOUNT_ROUTE,
+  COMPLIANCE_FEATURE_ROUTE,
+  ///: END:ONLY_INCLUDE_IN
 } from '../../../helpers/constants/routes';
 import TextField from '../../ui/text-field';
 
 import SearchIcon from '../../ui/icon/search-icon';
 import { IconColor } from '../../../helpers/constants/design-system';
 import { Icon, IconName, IconSize } from '../../component-library';
+///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+import { shortenAddress } from '../../../helpers/utils/util';
+import CustodyLabels from '../../institutional/custody-labels';
+import { toChecksumHexAddress } from '../../../../shared/modules/hexstring-utils';
+///: END:ONLY_INCLUDE_IN
+
 import KeyRingLabel from './keyring-label';
 
 export function AccountMenuItem(props) {
@@ -74,6 +84,11 @@ export default class AccountMenu extends Component {
     originOfCurrentTab: PropTypes.string,
     ///: BEGIN:ONLY_INCLUDE_IN(snaps)
     unreadNotificationsCount: PropTypes.number,
+    ///: END:ONLY_INCLUDE_IN
+    ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+    custodyAccountDetails: PropTypes.object,
+    mmiPortfolioEnabled: PropTypes.bool,
+    mmiPortfolioUrl: PropTypes.string,
     ///: END:ONLY_INCLUDE_IN
   };
 
@@ -147,6 +162,9 @@ export default class AccountMenu extends Component {
       setSelectedAccount,
       addressConnectedSubjectMap,
       originOfCurrentTab,
+      ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+      custodyAccountDetails,
+      ///: END:ONLY_INCLUDE_IN
     } = this.props;
     const { searchQuery } = this.state;
 
@@ -179,6 +197,13 @@ export default class AccountMenu extends Component {
         addressConnectedSubjectMap[identity.address] || {};
       const iconAndNameForOpenSubject = addressSubjects[originOfCurrentTab];
 
+      ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+      const labels = custodyAccountDetails
+        ? custodyAccountDetails[toChecksumHexAddress(identity.address)]
+            ?.labels || []
+        : [];
+      ///: END:ONLY_INCLUDE_IN
+
       return (
         <button
           className="account-menu__account account-menu__item--clickable"
@@ -198,12 +223,41 @@ export default class AccountMenu extends Component {
           <Identicon address={identity.address} diameter={24} />
           <div className="account-menu__account-info">
             <div className="account-menu__name">{identity.name || ''}</div>
-            <UserPreferencedCurrencyDisplay
-              className="account-menu__balance"
-              data-testid="account-menu__balance"
-              value={identity.balance}
-              type={PRIMARY}
-            />
+            {
+              ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+              <>
+                {labels && (
+                  <CustodyLabels
+                    labels={labels}
+                    background="transparent"
+                    hideNetwork
+                  />
+                )}
+                <div className="account-menu__balance-container">
+                  <UserPreferencedCurrencyDisplay
+                    className="account-menu__balance"
+                    data-testid="account-menu__balance"
+                    value={identity.balance}
+                    type={PRIMARY}
+                  />{' '}
+                  <span className="account-menu__address">
+                    {' '}
+                    · {shortenAddress(identity.address)}
+                  </span>
+                </div>
+              </>
+              ///: END:ONLY_INCLUDE_IN
+            }
+            {
+              ///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
+              <UserPreferencedCurrencyDisplay
+                className="account-menu__balance"
+                data-testid="account-menu__balance"
+                value={identity.balance}
+                type={PRIMARY}
+              />
+              ///: END:ONLY_INCLUDE_IN
+            }
           </div>
           <KeyRingLabel keyring={keyring} />
           {iconAndNameForOpenSubject ? (
@@ -237,6 +291,10 @@ export default class AccountMenu extends Component {
       history,
       ///: BEGIN:ONLY_INCLUDE_IN(snaps)
       unreadNotificationsCount,
+      ///: END:ONLY_INCLUDE_IN
+      ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+      mmiPortfolioEnabled,
+      mmiPortfolioUrl,
       ///: END:ONLY_INCLUDE_IN
     } = this.props;
 
@@ -291,6 +349,64 @@ export default class AccountMenu extends Component {
           }
           text={t('connectHardwareWallet')}
         />
+        {
+          ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+          <>
+            <AccountMenuItem
+              onClick={() => {
+                toggleAccountMenu();
+                if (getEnvironmentType() === ENVIRONMENT_TYPE_POPUP) {
+                  global.platform.openExtensionInBrowser(CUSTODY_ACCOUNT_ROUTE);
+                } else {
+                  history.push(CUSTODY_ACCOUNT_ROUTE);
+                }
+              }}
+              Icon={
+                <Icon
+                  name={IconName.Custody}
+                  color={IconColor.primaryDefault}
+                />
+              }
+              text={t('connectCustodialAccountMenu')}
+            />
+            {mmiPortfolioEnabled && (
+              <AccountMenuItem
+                onClick={() => {
+                  toggleAccountMenu();
+                  window.open(mmiPortfolioUrl, '_blank');
+                }}
+                Icon={
+                  <Icon
+                    name={IconName.MmmiPortfolioDashboard}
+                    color={IconColor.primaryDefault}
+                  />
+                }
+                text={t('portfolioDashboard')}
+              />
+            )}
+            <AccountMenuItem
+              onClick={() => {
+                toggleAccountMenu();
+                if (getEnvironmentType() === ENVIRONMENT_TYPE_POPUP) {
+                  global.platform.openExtensionInBrowser(
+                    COMPLIANCE_FEATURE_ROUTE,
+                  );
+                } else {
+                  history.push(COMPLIANCE_FEATURE_ROUTE);
+                }
+              }}
+              Icon={
+                <Icon
+                  name={IconName.Compliance}
+                  color={IconColor.primaryDefault}
+                />
+              }
+              text={t('compliance')}
+            />
+          </>
+          ///: END:ONLY_INCLUDE_IN
+        }
+        <div className="account-menu__divider" />
         {
           ///: BEGIN:ONLY_INCLUDE_IN(snaps)
           <AccountMenuItem
