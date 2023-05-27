@@ -29,7 +29,7 @@ import { getEnvironmentType } from '../../../../app/scripts/lib/util';
 import { ENVIRONMENT_TYPE_POPUP } from '../../../../shared/constants/app';
 import { MetaMetricsNetworkEventSource } from '../../../../shared/constants/metametrics';
 import { ADD_POPULAR_CUSTOM_NETWORK } from '../../../helpers/constants/routes';
-import { Icon, IconName } from '../../component-library';
+import { Icon, IconName, IconSize, ButtonIcon } from '../../component-library';
 import { Dropdown, DropdownMenuItem } from './dropdown';
 
 // classes from nodes of the toggle element.
