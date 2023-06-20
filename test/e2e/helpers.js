@@ -225,6 +225,7 @@ const importSRPOnboardingFlow = async (driver, seedPhrase, password) => {
   // metrics
   await driver.clickElement('[data-testid="metametrics-no-thanks"]');
 
+  await driver.waitForSelector('.import-srp__actions');
   // import with recovery phrase
   await driver.pasteIntoField(
     '[data-testid="import-srp__srp-word-0"]',
@@ -488,6 +489,7 @@ const sendTransaction = async (driver, recipientAddress, quantity) => {
   await driver.clickElement('[data-testid="page-container-footer-next"]');
   await driver.clickElement('[data-testid="page-container-footer-next"]');
   await driver.clickElement('[data-testid="home__activity-tab"]');
+  await driver.waitForElementNotPresent('.transaction-list-item--unconfirmed');
   await driver.findElement('.transaction-list-item');
 };
 
@@ -496,12 +498,12 @@ const findAnotherAccountFromAccountList = async (
   itemNumber,
   accountName,
 ) => {
-  await driver.clickElement('.account-menu__icon');
-  const accountMenuItemSelector = `.account-menu__account:nth-child(${itemNumber})`;
-  const fourthAccountName = await driver.findElement(
-    `${accountMenuItemSelector} .account-menu__name`,
+  await driver.clickElement('[data-testid="account-menu-icon"]');
+  const accountMenuItemSelector = `.multichain-account-list-item:nth-child(${itemNumber})`;
+  const acctName = await driver.findElement(
+    `${accountMenuItemSelector} .multichain-account-list-item__account-name__button`,
   );
-  assert.equal(await fourthAccountName.getText(), accountName);
+  assert.equal(await acctName.getText(), accountName);
   return accountMenuItemSelector;
 };
 
@@ -511,12 +513,121 @@ const TEST_SEED_PHRASE =
 const TEST_SEED_PHRASE_TWO =
   'phrase upgrade clock rough situate wedding elder clever doctor stamp excess tent';
 
+// Usually happens when onboarded to make sure the state is retrieved from metamaskState properly
+const assertAccountBalanceForDOM = async (driver, ganacheServer) => {
+  const balance = await ganacheServer.getBalance();
+  const balanceElement = await driver.findElement(
+    '[data-testid="eth-overview__primary-currency"]',
+  );
+  assert.equal(`${balance}\nETH`, await balanceElement.getText());
+};
+
+// Usually happens after txn is made
+const locateAccountBalanceDOM = async (driver, ganacheServer) => {
+  const balance = await ganacheServer.getBalance();
+  await driver.waitForSelector({
+    css: '[data-testid="eth-overview__primary-currency"]',
+    text: `${balance} ETH`,
+  });
+};
+const DEFAULT_PRIVATE_KEY =
+  '0x7C9529A67102755B7E6102D6D950AC5D5863C98713805CEC576B945B15B71EAC';
+const WALLET_PASSWORD = 'correct horse battery staple';
+
+const DEFAULT_GANACHE_OPTIONS = {
+  accounts: [
+    {
+      secretKey: DEFAULT_PRIVATE_KEY,
+      balance: generateETHBalance(25),
+    },
+  ],
+};
+
+const generateGanacheOptions = (overrides) => ({
+  ...DEFAULT_GANACHE_OPTIONS,
+  ...overrides,
+});
+
+async function waitForAccountRendered(driver) {
+  await driver.waitForSelector(
+    '[data-testid="eth-overview__primary-currency"]',
+  );
+}
+const WINDOW_TITLES = Object.freeze({
+  ExtensionInFullScreenView: 'MetaMask',
+  TestDApp: 'E2E Test Dapp',
+  Notification: 'MetaMask Notification',
+  ServiceWorkerSettings: 'Inspect with Chrome Developer Tools',
+  InstalledExtensions: 'Extensions',
+});
+
+const unlockWallet = async (driver) => {
+  await driver.fill('#password', 'correct horse battery staple');
+  await driver.press('#password', driver.Key.ENTER);
+};
+
+const logInWithBalanceValidation = async (driver, ganacheServer) => {
+  await unlockWallet(driver);
+  await assertAccountBalanceForDOM(driver, ganacheServer);
+};
+
+function roundToXDecimalPlaces(number, decimalPlaces) {
+  return Math.round(number * 10 ** decimalPlaces) / 10 ** decimalPlaces;
+}
+
+function generateRandNumBetween(x, y) {
+  const min = Math.min(x, y);
+  const max = Math.max(x, y);
+  const randomNumber = Math.random() * (max - min) + min;
+
+  return randomNumber;
+}
+
+async function switchToWindow(driver, windowTitle) {
+  const windowHandles = await driver.getAllWindowHandles();
+
+  return await driver.switchToWindowWithTitle(windowTitle, windowHandles);
+}
+
+async function sleepSeconds(sec) {
+  return new Promise((resolve) => setTimeout(resolve, sec * 1000));
+}
+
+async function terminateServiceWorker(driver) {
+  await driver.openNewPage(SERVICE_WORKER_URL);
+
+  await driver.waitForSelector({
+    text: 'Service workers',
+    tag: 'button',
+  });
+  await driver.clickElement({
+    text: 'Service workers',
+    tag: 'button',
+  });
+
+  const serviceWorkerElements = await driver.findElements({
+    text: 'terminate',
+    tag: 'span',
+  });
+
+  // 1st one is app-init.js; while 2nd one is service-worker.js
+  await serviceWorkerElements[serviceWorkerElements.length - 1].click();
+
+  const serviceWorkerTab = await switchToWindow(
+    driver,
+    WINDOW_TITLES.ServiceWorkerSettings,
+  );
+
+  await driver.closeWindowHandle(serviceWorkerTab);
+}
+
 module.exports = {
   DAPP_URL,
   DAPP_ONE_URL,
   SERVICE_WORKER_URL,
   TEST_SEED_PHRASE,
   TEST_SEED_PHRASE_TWO,
+  PRIVATE_KEY,
   getWindowHandles,
   convertToHexValue,
   tinyDelayMs,
@@ -537,4 +648,19 @@ module.exports = {
   defaultGanacheOptions,
   sendTransaction,
   findAnotherAccountFromAccountList,
+  unlockWallet,
+  logInWithBalanceValidation,
+  assertAccountBalanceForDOM,
+  locateAccountBalanceDOM,
+  waitForAccountRendered,
+  generateGanacheOptions,
+  WALLET_PASSWORD,
+  WINDOW_TITLES,
+  DEFAULT_GANACHE_OPTIONS,
+  generateETHBalance,
+  roundToXDecimalPlaces,
+  generateRandNumBetween,
+  switchToWindow,
+  sleepSeconds,
+  terminateServiceWorker,
 };

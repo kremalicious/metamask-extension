@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import classnames from 'classnames';
 import { useHistory } from 'react-router-dom';
 
-import Identicon from '../../ui/identicon';
 import { I18nContext } from '../../../contexts/i18n';
 import { SEND_ROUTE } from '../../../helpers/constants/routes';
 import Tooltip from '../../ui/tooltip';
@@ -33,7 +32,6 @@ const EthOverview = ({ className }) => {
 
   return (
     <WalletOverview
-      loading={!balance}
       balance={
         <Tooltip
           position="top"
@@ -95,7 +93,6 @@ const EthOverview = ({ className }) => {
         />
       }
       className={className}
-      icon={<Identicon diameter={32} image={primaryTokenImage} />}
     />
   );
 };

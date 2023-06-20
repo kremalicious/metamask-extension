@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { ApprovalType } from '@metamask/controller-utils';
 ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
 import {
   getMmiPortfolioEnabled,
@@ -34,7 +33,8 @@ import {
   getNewNftAddedMessage,
   getNewTokensImported,
   getRemoveNftMessage,
-  hasPendingApprovals,
+  getSuggestedTokens,
+  getSuggestedNfts,
 } from '../../selectors';
 
 import {
@@ -120,14 +120,14 @@ const mapStateToProps = (state) => {
     hasUnsignedQRHardwareTransaction(state) ||
     hasUnsignedQRHardwareMessage(state);
 
-  const hasWatchAssetPendingApprovals = hasPendingApprovals(
-    state,
-    ApprovalType.WatchAsset,
-  );
+  const hasWatchTokenPendingApprovals = getSuggestedTokens(state).length > 0;
+
+  const hasWatchNftPendingApprovals = getSuggestedNfts(state).length > 0;
 
   return {
     forgottenPassword,
-    hasWatchAssetPendingApprovals,
+    hasWatchTokenPendingApprovals,
+    hasWatchNftPendingApprovals,
     swapsEnabled,
     hasTransactionPendingApprovals: hasTransactionPendingApprovals(state),
     isPopup,
