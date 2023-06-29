@@ -12,7 +12,6 @@ import { PRIMARY, SECONDARY } from '../../../helpers/constants/common';
 import {
   isBalanceCached,
   getShouldShowFiat,
-  getNativeCurrencyImage,
   getSelectedAccountCachedBalance,
 } from '../../../selectors';
 import IconButton from '../../ui/icon-button';
@@ -21,17 +20,17 @@ import { startNewDraftTransaction } from '../../../ducks/send';
 import { AssetType } from '../../../../shared/constants/transaction';
 import WalletOverview from './wallet-overview';
 
-const EthOverview = ({ className }) => {
+const EthOverview = ({ className, showAddress }) => {
   const dispatch = useDispatch();
   const t = useContext(I18nContext);
   const history = useHistory();
   const balanceIsCached = useSelector(isBalanceCached);
   const showFiat = useSelector(getShouldShowFiat);
   const balance = useSelector(getSelectedAccountCachedBalance);
-  const primaryTokenImage = useSelector(getNativeCurrencyImage);
 
   return (
     <WalletOverview
+      showAddress={showAddress}
       balance={
         <Tooltip
           position="top"
@@ -99,10 +98,7 @@ const EthOverview = ({ className }) => {
 
 EthOverview.propTypes = {
   className: PropTypes.string,
-};
-
-EthOverview.defaultProps = {
-  className: undefined,
+  showAddress: PropTypes.bool,
 };
 
 export default EthOverview;

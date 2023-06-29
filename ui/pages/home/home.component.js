@@ -8,7 +8,6 @@ import MultipleNotifications from '../../components/app/multiple-notifications';
 import TransactionList from '../../components/app/transaction-list';
 import Popover from '../../components/ui/popover';
 import Button from '../../components/ui/button';
-import Box from '../../components/ui/box';
 import ConnectedSites from '../connected-sites';
 import ConnectedAccounts from '../connected-accounts';
 import { Tabs, Tab } from '../../components/ui/tabs';
@@ -28,6 +27,7 @@ import {
   ButtonIconSize,
   IconName,
   Text,
+  Box,
 } from '../../components/component-library';
 
 import {
@@ -609,10 +609,10 @@ export default class Home extends PureComponent {
           exact
         />
         <div className="home__container">
+          {showWhatsNew ? <WhatsNewPopup onClose={hideWhatsNewPopup} /> : null}
           {
             ///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
           }
-          {showWhatsNew ? <WhatsNewPopup onClose={hideWhatsNewPopup} /> : null}
           {showTermsOfUse ? (
             <TermsOfUsePopup onAccept={this.onAcceptTermsOfUse} />
           ) : null}
@@ -626,60 +626,62 @@ export default class Home extends PureComponent {
             <div className="home__balance-wrapper">
               {
                 ///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
-                <EthOverview />
+                <EthOverview showAddress />
                 ///: END:ONLY_INCLUDE_IN
               }
             </div>
-            <Tabs
-              t={this.context.t}
-              defaultActiveTabKey={defaultHomeActiveTabName}
-              onTabClick={(tabName) => {
-                onTabClick(tabName);
-              }}
-              tabsClassName="home__tabs"
-            >
-              <Tab
-                activeClassName="home__tab--active"
-                className="home__tab"
-                data-testid="home__asset-tab"
-                name={this.context.t('tokens')}
-                tabKey="tokens"
+            <Box style={{ flexGrow: '1' }}>
+              <Tabs
+                t={this.context.t}
+                defaultActiveTabKey={defaultHomeActiveTabName}
+                onTabClick={(tabName) => {
+                  onTabClick(tabName);
+                }}
+                tabsClassName="home__tabs"
               >
-                <Box marginTop={2}>
-                  <AssetList
-                    onClickAsset={(asset) =>
-                      history.push(`${ASSET_ROUTE}/${asset}`)
-                    }
-                  />
-                </Box>
-              </Tab>
-              {
-                ///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
                 <Tab
                   activeClassName="home__tab--active"
                   className="home__tab"
-                  data-testid="home__nfts-tab"
-                  name={this.context.t('nfts')}
-                  tabKey="nfts"
+                  data-testid="home__asset-tab"
+                  name={this.context.t('tokens')}
+                  tabKey="tokens"
                 >
-                  <NftsTab
-                    onAddNFT={() => {
-                      history.push(ADD_NFT_ROUTE);
-                    }}
-                  />
+                  <Box marginTop={2}>
+                    <AssetList
+                      onClickAsset={(asset) =>
+                        history.push(`${ASSET_ROUTE}/${asset}`)
+                      }
+                    />
+                  </Box>
                 </Tab>
-                ///: END:ONLY_INCLUDE_IN
-              }
-              <Tab
-                activeClassName="home__tab--active"
-                className="home__tab"
-                data-testid="home__activity-tab"
-                name={t('activity')}
-                tabKey="activity"
-              >
-                <TransactionList />
-              </Tab>
-            </Tabs>
+                {
+                  ///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
+                  <Tab
+                    activeClassName="home__tab--active"
+                    className="home__tab"
+                    data-testid="home__nfts-tab"
+                    name={this.context.t('nfts')}
+                    tabKey="nfts"
+                  >
+                    <NftsTab
+                      onAddNFT={() => {
+                        history.push(ADD_NFT_ROUTE);
+                      }}
+                    />
+                  </Tab>
+                  ///: END:ONLY_INCLUDE_IN
+                }
+                <Tab
+                  activeClassName="home__tab--active"
+                  className="home__tab"
+                  data-testid="home__activity-tab"
+                  name={t('activity')}
+                  tabKey="activity"
+                >
+                  <TransactionList />
+                </Tab>
+              </Tabs>
+            </Box>
           </div>
 
           {this.renderNotifications()}
