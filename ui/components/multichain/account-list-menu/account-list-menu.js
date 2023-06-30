@@ -123,7 +123,7 @@ export const AccountListMenu = ({ onClose }) => {
       {actionMode === '' ? (
         <Box>
           {/* Search box */}
-          {accounts.length > 1 ? (
+          {accounts.length > 100 ? (
             <Box
               paddingLeft={4}
               paddingRight={4}
@@ -185,7 +185,7 @@ export const AccountListMenu = ({ onClose }) => {
           </Box>
           {/* Add / Import / Hardware */}
           <Box padding={4}>
-            <Box marginBottom={4}>
+            <Box>
               <ButtonLink
                 size={Size.SM}
                 startIconName={IconName.Add}
@@ -205,7 +205,7 @@ export const AccountListMenu = ({ onClose }) => {
                 {t('addAccount')}
               </ButtonLink>
             </Box>
-            <Box marginBottom={4}>
+            <Box>
               <ButtonLink
                 size={Size.SM}
                 startIconName={IconName.Import}
@@ -224,7 +224,7 @@ export const AccountListMenu = ({ onClose }) => {
                 {t('importAccount')}
               </ButtonLink>
             </Box>
-            <Box marginBottom={4}>
+            <Box>
               <ButtonLink
                 size={Size.SM}
                 startIconName={IconName.Hardware}
@@ -253,7 +253,7 @@ export const AccountListMenu = ({ onClose }) => {
             {
               ///: BEGIN:ONLY_INCLUDE_IN(keyring-snaps)
               <>
-                <Box marginTop={4}>
+                <Box>
                   <ButtonLink
                     size={Size.SM}
                     startIconName={IconName.Snaps}

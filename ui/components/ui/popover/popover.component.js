@@ -85,6 +85,7 @@ const Popover = ({
     <Box
       {...{ ...defaultHeaderProps, ...headerProps }}
       className="popover-header"
+      padding={4}
     >
       <Box
         display={DISPLAY.FLEX}
@@ -93,7 +94,6 @@ const Popover = ({
         className={classnames('popover-header__title', {
           'popover-header__title--center': centerTitle,
         })}
-        marginBottom={2}
       >
         {onBack ? (
           <ButtonIcon

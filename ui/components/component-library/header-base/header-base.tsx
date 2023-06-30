@@ -67,6 +67,7 @@ export const HeaderBase: React.FC<HeaderBaseProps> = ({
       display={DISPLAY.FLEX}
       justifyContent={JustifyContent.spaceBetween}
       {...props}
+      padding={1}
     >
       {startAccessory && (
         <Box

@@ -23,12 +23,9 @@ import ToggleButton from '../../ui/toggle-button';
 import {
   Display,
   JustifyContent,
+  Size,
 } from '../../../helpers/constants/design-system';
-import {
-  BUTTON_SECONDARY_SIZES,
-  ButtonSecondary,
-  Text,
-} from '../../component-library';
+import { Text, ButtonLink, IconName } from '../../component-library';
 import { ADD_POPULAR_CUSTOM_NETWORK } from '../../../helpers/constants/routes';
 import { getEnvironmentType } from '../../../../app/scripts/lib/util';
 import { ENVIRONMENT_TYPE_FULLSCREEN } from '../../../../shared/constants/app';
@@ -158,10 +155,10 @@ export const NetworkListMenu = ({ onClose }) => {
             }}
           />
         </Box>
-        <Box padding={4}>
-          <ButtonSecondary
-            size={BUTTON_SECONDARY_SIZES.LG}
-            block
+        <Box paddingLeft={4} paddingRight={4} paddingBottom={4}>
+          <ButtonLink
+            size={Size.SM}
+            startIconName={IconName.Add}
             onClick={() => {
               if (isFullScreen) {
                 if (completedOnboarding) {
@@ -182,7 +179,7 @@ export const NetworkListMenu = ({ onClose }) => {
             }}
           >
             {t('addNetwork')}
-          </ButtonSecondary>
+          </ButtonLink>
         </Box>
       </>
     </Popover>

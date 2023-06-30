@@ -91,7 +91,7 @@ export const Popover = ({
       borderColor={BorderColor.borderMuted}
       borderRadius={BorderRadius.LG}
       backgroundColor={BackgroundColor.backgroundDefault}
-      padding={4}
+      padding={2}
       role={role}
       className={classnames(
         'mm-popover',
