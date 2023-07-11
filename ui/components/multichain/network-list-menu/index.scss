@@ -1,8 +1,3 @@
 .multichain-network-list-menu {
   overflow: auto;
-
-  /* Overrides the popover's default behavior */
-  &-content-wrapper {
-    border-radius: 0;
-  }
 }

@@ -315,31 +315,42 @@ export default class MetamaskController extends EventEmitter {
       ],
     });
 
-    let initialProviderConfig;
-    if (process.env.IN_TEST) {
-      initialProviderConfig = {
-        type: NETWORK_TYPES.RPC,
-        rpcUrl: 'http://localhost:8545',
-        chainId: '0x539',
-        nickname: 'Localhost 8545',
-        ticker: 'ETH',
+    let initialNetworkControllerState = {};
+    if (initState.NetworkController) {
+      initialNetworkControllerState = initState.NetworkController;
+    } else if (process.env.IN_TEST) {
+      initialNetworkControllerState = {
+        providerConfig: {
+          chainId: CHAIN_IDS.LOCALHOST,
+          nickname: 'Localhost 8545',
+          rpcPrefs: {},
+          rpcUrl: 'http://localhost:8545',
+          ticker: 'ETH',
+          type: 'rpc',
+        },
+        networkConfigurations: {
+          networkConfigurationId: {
+            chainId: CHAIN_IDS.LOCALHOST,
+            nickname: 'Localhost 8545',
+            rpcPrefs: {},
+            rpcUrl: 'http://localhost:8545',
+            ticker: 'ETH',
+            networkConfigurationId: 'networkConfigurationId',
+          },
+        },
       };
     } else if (
       process.env.METAMASK_DEBUG ||
       process.env.METAMASK_ENVIRONMENT === 'test'
     ) {
-      initialProviderConfig = {
-        type: NETWORK_TYPES.GOERLI,
-        chainId: CHAIN_IDS.GOERLI,
-        ticker: TEST_NETWORK_TICKER_MAP[NETWORK_TYPES.GOERLI],
+      initialNetworkControllerState = {
+        providerConfig: {
+          type: NETWORK_TYPES.GOERLI,
+          chainId: CHAIN_IDS.GOERLI,
+          ticker: TEST_NETWORK_TICKER_MAP[NETWORK_TYPES.GOERLI],
+        },
       };
     }
-    const initialNetworkControllerState = initialProviderConfig
-      ? {
-          providerConfig: initialProviderConfig,
-          ...initState.NetworkController,
-        }
-      : initState.NetworkController;
     this.networkController = new NetworkController({
       messenger: networkControllerMessenger,
       state: initialNetworkControllerState,
@@ -568,8 +579,12 @@ export default class MetamaskController extends EventEmitter {
         ),
       getCurrentAccountEIP1559Compatibility:
         this.getCurrentAccountEIP1559Compatibility.bind(this),
+      legacyAPIEndpoint: `${gasApiBaseUrl}/networks/<chain_id>/gasPrices`,
       EIP1559APIEndpoint: `${gasApiBaseUrl}/networks/<chain_id>/suggestedGasFees`,
-      getCurrentNetworkLegacyGasAPICompatibility: () => false,
+      getCurrentNetworkLegacyGasAPICompatibility: () => {
+        const { chainId } = this.networkController.state.providerConfig;
+        return chainId === CHAIN_IDS.BSC;
+      },
       getChainId: () => this.networkController.state.providerConfig.chainId,
     });
 
@@ -1467,6 +1482,18 @@ export default class MetamaskController extends EventEmitter {
         this.signatureController.newUnsignedPersonalMessage.bind(
           this.signatureController,
         ),
+
+      ///: BEGIN:ONLY_INCLUDE_IN(build-mmi)
+      setTypedMessageInProgress:
+        this.signatureController.setTypedMessageInProgress.bind(
+          this.signatureController,
+        ),
+      setPersonalMessageInProgress:
+        this.signatureController.setPersonalMessageInProgress.bind(
+          this.signatureController,
+        ),
+      ///: END:ONLY_INCLUDE_IN
+
       processEncryptionPublicKey:
         this.encryptionPublicKeyController.newRequestEncryptionPublicKey.bind(
           this.encryptionPublicKeyController,
@@ -2467,6 +2494,10 @@ export default class MetamaskController extends EventEmitter {
       handleSnapRequest: this.controllerMessenger.call.bind(
         this.controllerMessenger,
         'SnapController:handleRequest',
+      ),
+      revokeDynamicSnapPermissions: this.controllerMessenger.call.bind(
+        this.controllerMessenger,
+        'SnapController:revokeDynamicPermissions',
       ),
       dismissNotifications: this.dismissNotifications.bind(this),
       markNotificationsAsRead: this.markNotificationsAsRead.bind(this),
