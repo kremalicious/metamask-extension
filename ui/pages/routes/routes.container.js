@@ -14,6 +14,7 @@ import {
 } from '../../selectors';
 import {
   lockMetamask,
+  hideImportNftsModal,
   setCurrentCurrency,
   setLastActiveTime,
   setMouseUserState,
@@ -61,6 +62,7 @@ function mapStateToProps(state) {
     isAccountMenuOpen: state.metamask.isAccountMenuOpen,
     isNetworkMenuOpen: state.metamask.isNetworkMenuOpen,
     accountDetailsAddress: state.appState.accountDetailsAddress,
+    isImportNftsModalOpen: state.appState.importNftsModalOpen,
   };
 }
 
@@ -75,6 +77,7 @@ function mapDispatchToProps(dispatch) {
     prepareToLeaveSwaps: () => dispatch(prepareToLeaveSwaps()),
     toggleAccountMenu: () => dispatch(toggleAccountMenu()),
     toggleNetworkMenu: () => dispatch(toggleNetworkMenu()),
+    hideImportNftsModal: () => dispatch(hideImportNftsModal()),
   };
 }
 

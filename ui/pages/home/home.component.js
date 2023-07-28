@@ -2,7 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
 import AssetList from '../../components/app/asset-list';
+///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
 import NftsTab from '../../components/app/nfts-tab';
+import TermsOfUsePopup from '../../components/app/terms-of-use-popup';
+///: END:ONLY_INCLUDE_IN
 import HomeNotification from '../../components/app/home-notification';
 import MultipleNotifications from '../../components/app/multiple-notifications';
 import TransactionList from '../../components/app/transaction-list';
@@ -13,11 +16,11 @@ import ConnectedAccounts from '../connected-accounts';
 import { Tabs, Tab } from '../../components/ui/tabs';
 import { EthOverview } from '../../components/app/wallet-overview';
 import WhatsNewPopup from '../../components/app/whats-new-popup';
-import TermsOfUsePopup from '../../components/app/terms-of-use-popup';
+
 import ActionableMessage from '../../components/ui/actionable-message/actionable-message';
 import {
-  FONT_WEIGHT,
-  DISPLAY,
+  FontWeight,
+  Display,
   TextColor,
   TextVariant,
 } from '../../helpers/constants/design-system';
@@ -26,8 +29,8 @@ import {
   ButtonIcon,
   ButtonIconSize,
   IconName,
-  Text,
   Box,
+  Text,
 } from '../../components/component-library';
 
 import {
@@ -43,7 +46,6 @@ import {
   BUILD_QUOTE_ROUTE,
   VIEW_QUOTE_ROUTE,
   CONFIRMATION_V_NEXT_ROUTE,
-  ADD_NFT_ROUTE,
 } from '../../helpers/constants/routes';
 import ZENDESK_URLS from '../../helpers/constants/zendesk-url';
 
@@ -67,7 +69,7 @@ function shouldCloseNotificationPopup({
   shouldCLose &&=
     // MMI User must be shown a deeplink
     !waitForConfirmDeepLinkDialog &&
-    // MMI User is connecting to custodian or compliance
+    // MMI User is connecting to custodian
     institutionalConnectRequests.length === 0;
   ///: END:ONLY_INCLUDE_IN
 
@@ -87,13 +89,14 @@ export default class Home extends PureComponent {
     hasWatchTokenPendingApprovals: PropTypes.bool,
     hasWatchNftPendingApprovals: PropTypes.bool,
     isPopup: PropTypes.bool,
+    connectedStatusPopoverHasBeenShown: PropTypes.bool,
+    showTermsOfUsePopup: PropTypes.bool.isRequired,
     isNotification: PropTypes.bool.isRequired,
     firstPermissionsRequestId: PropTypes.string,
     // This prop is used in the `shouldCloseNotificationPopup` function
     // eslint-disable-next-line react/no-unused-prop-types
     totalUnapprovedCount: PropTypes.number.isRequired,
     setConnectedStatusPopoverHasBeenShown: PropTypes.func,
-    connectedStatusPopoverHasBeenShown: PropTypes.bool,
     defaultHomeActiveTabName: PropTypes.string,
     firstTimeFlowType: PropTypes.string,
     completedOnboarding: PropTypes.bool,
@@ -110,7 +113,6 @@ export default class Home extends PureComponent {
     infuraBlocked: PropTypes.bool.isRequired,
     showWhatsNewPopup: PropTypes.bool.isRequired,
     hideWhatsNewPopup: PropTypes.func.isRequired,
-    showTermsOfUsePopup: PropTypes.bool.isRequired,
     announcementsToShow: PropTypes.bool.isRequired,
     ///: BEGIN:ONLY_INCLUDE_IN(snaps)
     errorsToShow: PropTypes.object.isRequired,
@@ -326,7 +328,7 @@ export default class Home extends PureComponent {
             autoHideTime={autoHideDelay}
             onAutoHide={onAutoHide}
             message={
-              <Box display={DISPLAY.INLINE_FLEX}>
+              <Box display={Display.InlineFlex}>
                 <i className="fa fa-check-circle home__new-nft-notification-icon" />
                 <Text variant={TextVariant.bodySm} as="h6">
                   {t('newNftAddedMessage')}
@@ -348,7 +350,7 @@ export default class Home extends PureComponent {
             autoHideTime={autoHideDelay}
             onAutoHide={onAutoHide}
             message={
-              <Box display={DISPLAY.INLINE_FLEX}>
+              <Box display={Display.InlineFlex}>
                 <i className="fa fa-check-circle home__new-nft-notification-icon" />
                 <Text variant={TextVariant.bodySm} as="h6">
                   {t('removeNftMessage')}
@@ -368,7 +370,7 @@ export default class Home extends PureComponent {
             type="success"
             className="home__new-network-notification"
             message={
-              <Box display={DISPLAY.INLINE_FLEX}>
+              <Box display={Display.InlineFlex}>
                 <i className="fa fa-check-circle home__new-network-notification-icon" />
                 <Text variant={TextVariant.bodySm} as="h6">
                   {t('newNetworkAdded', [newNetworkAddedName])}
@@ -389,7 +391,7 @@ export default class Home extends PureComponent {
             type="success"
             className="home__new-tokens-imported-notification"
             message={
-              <Box display={DISPLAY.INLINE_FLEX}>
+              <Box display={Display.InlineFlex}>
                 <i className="fa fa-check-circle home__new-tokens-imported-notification-icon" />
                 <Box>
                   <Text
@@ -484,7 +486,7 @@ export default class Home extends PureComponent {
               marginRight={9}
               marginLeft={9}
               marginBottom={0}
-              fontWeight={FONT_WEIGHT.BOLD}
+              fontWeight={FontWeight.Bold}
             >
               {t('networkAddedSuccessfully')}
             </Text>
@@ -574,12 +576,14 @@ export default class Home extends PureComponent {
       onTabClick,
       forgottenPassword,
       history,
+      ///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
       connectedStatusPopoverHasBeenShown,
       isPopup,
+      showTermsOfUsePopup,
+      ///: END:ONLY_INCLUDE_IN
       announcementsToShow,
       showWhatsNewPopup,
       hideWhatsNewPopup,
-      showTermsOfUsePopup,
       firstTimeFlowType,
       completedOnboarding,
       onboardedInThisUISession,
@@ -600,8 +604,10 @@ export default class Home extends PureComponent {
       !process.env.IN_TEST &&
       !newNetworkAddedConfigurationId;
 
+    ///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
     const showTermsOfUse =
       completedOnboarding && !onboardedInThisUISession && showTermsOfUsePopup;
+    ///: END:ONLY_INCLUDE_IN
 
     return (
       <div className="main-container">
@@ -666,11 +672,7 @@ export default class Home extends PureComponent {
                     name={this.context.t('nfts')}
                     tabKey="nfts"
                   >
-                    <NftsTab
-                      onAddNFT={() => {
-                        history.push(ADD_NFT_ROUTE);
-                      }}
-                    />
+                    <NftsTab />
                   </Tab>
                   ///: END:ONLY_INCLUDE_IN
                 }
