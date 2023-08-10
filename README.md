@@ -21,6 +21,7 @@
 - UX improvements around network dropdown
 - remove all the *Buy*, *Swap* etc. buttons, replace remaining *Send* with text only
 - remove all *contact support* banners
+- hide NFT tab completely, cause it's just badly designed
 
 ## Quick Start
 

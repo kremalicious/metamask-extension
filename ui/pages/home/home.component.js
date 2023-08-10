@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
 import AssetList from '../../components/app/asset-list';
 ///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
-import NftsTab from '../../components/app/nfts-tab';
 import TermsOfUsePopup from '../../components/app/terms-of-use-popup';
 ///: END:ONLY_INCLUDE_IN
 import HomeNotification from '../../components/app/home-notification';
@@ -672,19 +671,6 @@ export default class Home extends PureComponent {
                       }
                     />
                   </Box>
-                </Tab>
-                <Tab
-                  activeClassName="home__tab--active"
-                  className="home__tab"
-                  data-testid="home__nfts-tab"
-                  name={this.context.t('nfts')}
-                  tabKey="nfts"
-                >
-                  {
-                    ///: BEGIN:ONLY_INCLUDE_IN(build-main,build-beta,build-flask)
-                    <NftsTab />
-                    ///: END:ONLY_INCLUDE_IN
-                  }
                 </Tab>
                 <Tab
                   activeClassName="home__tab--active"
