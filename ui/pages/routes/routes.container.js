@@ -13,6 +13,7 @@ import {
   isCurrentProviderCustom,
 } from '../../selectors';
 import {
+  hideImportTokensModal,
   lockMetamask,
   hideImportNftsModal,
   hideIpfsModal,
@@ -62,6 +63,7 @@ function mapStateToProps(state) {
     completedOnboarding,
     isAccountMenuOpen: state.metamask.isAccountMenuOpen,
     isNetworkMenuOpen: state.metamask.isNetworkMenuOpen,
+    isImportTokensModalOpen: state.appState.importTokensModalOpen,
     accountDetailsAddress: state.appState.accountDetailsAddress,
     isImportNftsModalOpen: state.appState.importNftsModalOpen,
     isIpfsModalOpen: state.appState.showIpfsModalOpen,
@@ -81,6 +83,7 @@ function mapDispatchToProps(dispatch) {
     toggleNetworkMenu: () => dispatch(toggleNetworkMenu()),
     hideImportNftsModal: () => dispatch(hideImportNftsModal()),
     hideIpfsModal: () => dispatch(hideIpfsModal()),
+    hideImportTokensModal: () => dispatch(hideImportTokensModal()),
   };
 }
 

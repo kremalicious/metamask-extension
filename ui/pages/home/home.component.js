@@ -684,7 +684,6 @@ export default class Home extends PureComponent {
               </Tabs>
             </Box>
           </div>
-
           {this.renderNotifications()}
         </div>
       </div>

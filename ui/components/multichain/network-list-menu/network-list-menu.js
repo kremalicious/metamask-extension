@@ -75,7 +75,7 @@ export const NetworkListMenu = ({ onClose }) => {
 
   const isUnlocked = useSelector((state) => state.metamask.isUnlocked);
 
-  const showSearch = nonTestNetworks.length > 3;
+  const showSearch = nonTestNetworks.length > 10;
 
   useEffect(() => {
     if (currentlyOnTestNetwork) {
