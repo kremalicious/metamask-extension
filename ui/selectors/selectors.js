@@ -107,8 +107,9 @@ import { getPermissionSubjects } from './permissions';
 export function isNetworkLoading(state) {
   const selectedNetworkClientId = getSelectedNetworkClientId(state);
   return (
+    selectedNetworkClientId &&
     state.metamask.networksMetadata[selectedNetworkClientId].status !==
-    NetworkStatus.Available
+      NetworkStatus.Available
   );
 }
 
@@ -375,8 +376,8 @@ export const getMetaMaskAccountsConnected = createSelector(
 );
 
 export function isBalanceCached(state) {
-  const selectedAccountBalance =
-    state.metamask.accounts[getSelectedAddress(state)].balance;
+  const selectedAccount = state.metamask.accounts[getSelectedAddress(state)];
+  const selectedAccountBalance = selectedAccount && selectedAccount.balance;
   const cachedBalance = getSelectedAccountCachedBalance(state);
 
   return Boolean(!selectedAccountBalance && cachedBalance);
