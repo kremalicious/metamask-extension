@@ -19,6 +19,7 @@ import {
   DetectedTokensBanner,
   TokenListItem,
   ImportTokenLink,
+  BalanceOverview,
 } from '../../multichain';
 
 const AssetList = ({ onClickAsset }) => {
@@ -61,6 +62,7 @@ const AssetList = ({ onClickAsset }) => {
 
   return (
     <>
+      {process.env.MULTICHAIN ? <BalanceOverview /> : null}
       <TokenListItem
         onClick={() => onClickAsset(nativeCurrency)}
         title={nativeCurrency}
